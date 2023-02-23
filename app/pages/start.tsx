@@ -9,15 +9,9 @@ export default function Start() {
   const [nameInput, setNameInput] = useState<string>("");
   const player = useAppSelector((state) => state.player);
 
-  console.log("start page");
-  console.log(player, "player");
   const start = () => {
     dispatch(setName(nameInput));
     router.push("/");
-  };
-
-  const reload = () => {
-    router.push("/start");
   };
 
   return (
@@ -27,7 +21,6 @@ export default function Start() {
       <input value={nameInput} onChange={(e) => setNameInput(e.target.value)} />
       <button onClick={start}>はじめる</button>
       <div>player: {player ? player.name : ""}</div>
-      <button onClick={reload}> reload </button>
     </>
   );
 }

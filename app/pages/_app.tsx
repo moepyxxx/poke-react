@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { store } from "../stores/store";
 
 export default function App({ Component, pageProps }: AppProps) {
-  console.log("app");
   return (
     <Provider store={store}>
       <Component {...pageProps} />
