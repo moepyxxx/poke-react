@@ -12,7 +12,7 @@ export type Scene =
 
 export default function Start() {
   const router = useRouter();
-  const [scene, setScene] = useState<Scene>("setFirstPokemon");
+  const [scene, setScene] = useState<Scene>("setPlayerName");
   const state = useAppSelector((state) => state);
 
   const gameStart = () => {

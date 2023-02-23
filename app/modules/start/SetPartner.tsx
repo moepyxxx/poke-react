@@ -1,5 +1,5 @@
 import { Scene } from "@/pages/start";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -8,15 +8,28 @@ import { Partner, setPartner } from "../../stores/playerSlices";
 import { nameSchema } from "../../config/schema";
 import { selectablePartnerIds } from "@/config";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
+import Image from "next/image";
+import { PokeAPIPokemon } from "@/config/types";
 
 type Props = {
   setScene: Dispatch<SetStateAction<Scene>>;
 };
 
+type FormData = Pick<Partner, "id" | "nickname"> & { isNickname: boolean };
+
 const schema = yup
-  .object<Partner>({
+  .object<FormData>({
     id: yup.mixed().oneOf(selectablePartnerIds),
-    nickname: nameSchema,
+    isNickname: yup
+      .string()
+      .required()
+      .oneOf(["true", "false"])
+      .default("true"),
+    nickname: yup.string().when("isNickname", {
+      is: "true",
+      then: () => nameSchema,
+      otherwise: (schema) => schema,
+    }),
   })
   .required();
 
@@ -29,26 +42,70 @@ export const SetPartner: React.FC<Props> = ({ setScene }) => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<Partner>({
+  } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
+  const [currentSelectPartner, setCurrentPartner] = useState<PokeAPIPokemon>();
+
+  useEffect(() => {
+    const pokemon = pokemons.find((pokemon) => pokemon.id == watch("id"));
+    if (!pokemon) return;
+    setCurrentPartner(pokemon);
+  }, [watch("id")]);
+
   const onSubmit = handleSubmit((data) => {
-    dispatch(setPartner(data));
-    setScene("greeting");
+    if (!currentSelectPartner) return;
+    dispatch(
+      setPartner({
+        id: currentSelectPartner.id,
+        name: currentSelectPartner.name,
+        nickname: data.nickname,
+      })
+    );
+    setScene("closingTalk");
   });
 
   return (
     <>
-      {pokemons.map((p) => (
-        <p key={p?.id}>{p?.name}</p>
-      ))}
       <h2>最初のパートナーを教えてください。</h2>
       <form onSubmit={onSubmit}>
-        <input {...register("id")} />
-        <input {...register("name")} />
-        <input {...register("nickname")} />
-        <p>{errors.nickname?.message}</p>
+        <select
+          {...register("id", {
+            valueAsNumber: true,
+          })}
+        >
+          {pokemons.map((p) => {
+            return (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            );
+          })}
+        </select>
+        <p>{errors.id?.message}</p>
+        {currentSelectPartner ? (
+          <div>
+            <Image
+              width="100"
+              height="100"
+              src={currentSelectPartner.sprites.front_default}
+              alt={currentSelectPartner.name}
+            />
+          </div>
+        ) : (
+          ""
+        )}
+        <div>
+          <input type="checkbox" value="false" {...register("isNickname")} />
+          ニックネームをつけない
+          <p>{errors.isNickname?.message}</p>
+        </div>
+        <div>
+          {" "}
+          <input {...register("nickname")} />
+          <p>{errors.nickname?.message}</p>
+        </div>
         <input type="submit" />
       </form>
     </>
