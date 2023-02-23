@@ -1,52 +1,51 @@
-import { useAppDispatch } from "hooks";
-import { setName } from "../stores/playerSlices";
+import { SetPartner } from "@/modules/start/SetPartner";
+import { SetPlayerName } from "@/modules/start/SetPlayerName";
+import { useAppSelector } from "hooks";
 import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { useState } from "react";
 
-type FormData = {
-  name: string;
-};
-
-const schema = yup
-  .object<FormData>({
-    name: yup
-      .string()
-      .min(1, "最小1文字です")
-      .max(5, "最大5文字です")
-      .matches(/^[ァ-ヶ]+$/i, "カタカナだけ利用できます")
-      .required("必須です"),
-  })
-  .required();
+export type Scene =
+  | "setPlayerName"
+  | "greeting"
+  | "setFirstPokemon"
+  | "closingTalk";
 
 export default function Start() {
-  const dispatch = useAppDispatch();
   const router = useRouter();
+  const [scene, setScene] = useState<Scene>("setFirstPokemon");
+  const state = useAppSelector((state) => state);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: yupResolver(schema),
-  });
-
-  const onSubmit = handleSubmit((data) => {
-    dispatch(setName(data.name));
+  const gameStart = () => {
     router.push("/");
-  });
+  };
 
-  return (
-    <>
-      <div>はじめから</div>
-      <br />
-
-      <form onSubmit={onSubmit}>
-        <input {...register("name")} />
-        <p>{errors.name?.message}</p>
-        <input type="submit" />
-      </form>
-    </>
-  );
+  switch (scene) {
+    case "setPlayerName":
+      return <SetPlayerName setScene={setScene} />;
+    case "greeting":
+      return (
+        <>
+          <p>こんにちは、{state.player.name}さん！</p>
+          <p>サファリパークだけできるポケモンへようこそ。</p>
+          <p>いっぱい遊んでくださいね。</p>
+          <button onClick={() => setScene("setFirstPokemon")}>次へ</button>
+        </>
+      );
+    case "setFirstPokemon":
+      return <SetPartner setScene={setScene} />;
+    case "closingTalk":
+      return (
+        <>
+          <p>
+            {state.player.name}
+            さんとパートナーの{state.player.partner?.name}
+            の、最初のデータがすべてきちんと作成されました！
+          </p>
+          <p>こまめにセーブをするのは、忘れないでくださいね。</p>
+          <button onClick={gameStart}>ゲームスタート</button>
+        </>
+      );
+    default:
+      return <></>;
+  }
 }

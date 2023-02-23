@@ -12,17 +12,15 @@ export default function Home() {
   const player = useAppSelector((state) => state.player);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (!player.isSet) {
-        router.push("start");
-      }
-    }, 300);
+    if (!player.isSet) {
+      router.push("start");
+    }
   }, [router, player]);
 
   return (
     <>
       <div>TOP</div>
-      <div>{player ? player.name : ""}</div>
+      <p>{player ? player.name : ""}</p>
     </>
   );
 }

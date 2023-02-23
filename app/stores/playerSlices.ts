@@ -2,10 +2,10 @@ import { createSlice, SliceCaseReducers } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
 
-type Partner = {
+export type Partner = {
   id: number;
   name: string;
-  nickName: string;
+  nickname: string;
 };
 
 type Player = {
