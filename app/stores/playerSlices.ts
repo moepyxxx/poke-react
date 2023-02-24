@@ -8,11 +8,14 @@ export type Partner = {
   nickname: string;
 };
 
+export type Pokemon = Partner;
+
 type Player = {
   isSet: boolean;
   name: string;
   playTime: number;
   partner: Partner | null;
+  pokemons: Pokemon[];
 };
 
 const initialState: Player = {
@@ -20,6 +23,7 @@ const initialState: Player = {
   name: "",
   playTime: 0,
   partner: null,
+  pokemons: [],
 };
 
 const reducers: SliceCaseReducers<Player> = {
@@ -43,6 +47,6 @@ export const partnerSlice = createSlice<Player, SliceCaseReducers<Player>>({
 
 export const { setName, setPlayTime, setPartner } = partnerSlice.actions;
 
-export const selectPartner = (state: RootState) => state.player;
+export const selectPlayer = (state: RootState) => state.player;
 
 export default partnerSlice.reducer;
