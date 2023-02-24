@@ -20,7 +20,11 @@ export default function Home() {
   return (
     <>
       <div>TOP</div>
-      <p>{player ? player.name : ""}</p>
+      <div>
+        {/* 絶対よくない */}
+        {/* see: https://ja.reactjs.org/docs/react-dom.html#hydrate */}
+        <p suppressHydrationWarning>{player ? player.name : ""}</p>
+      </div>
     </>
   );
 }

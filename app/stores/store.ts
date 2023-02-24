@@ -6,8 +6,8 @@ export const store = configureStore({
   reducer: {
     player: playerReducer,
   },
-  // preloadedState: load(),
-  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(save()),
+  preloadedState: load(),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(save()),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
