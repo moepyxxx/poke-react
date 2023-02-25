@@ -2,19 +2,17 @@ import { createSlice, SliceCaseReducers } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
 
-export type Partner = {
+export type Pokemon = {
   id: number;
   name: string;
   nickname: string;
+  isPartner?: boolean;
 };
-
-export type Pokemon = Partner;
 
 type Player = {
   isSet: boolean;
   name: string;
   playTime: number;
-  partner: Partner | null;
   pokemons: Pokemon[];
 };
 
@@ -22,7 +20,6 @@ const initialState: Player = {
   isSet: false,
   name: "",
   playTime: 0,
-  partner: null,
   pokemons: [],
 };
 
@@ -33,9 +30,6 @@ const reducers: SliceCaseReducers<Player> = {
   },
   setPlayTime: (state, action: PayloadAction<number>) => {
     state.playTime = action.payload;
-  },
-  setPartner: (state, action: PayloadAction<Partner | null>) => {
-    state.partner = action.payload;
   },
   addPokemons: (state, action: PayloadAction<Pokemon[]>) => {
     state.pokemons = [...state.pokemons, ...action.payload];

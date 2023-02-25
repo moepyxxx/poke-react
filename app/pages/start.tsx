@@ -38,7 +38,7 @@ export default function Start() {
         <>
           <p>
             {state.player.name}
-            さんとパートナーの{state.player.partner?.name}
+            さんとパートナーの{state.player.pokemons[0].name}
             の、最初のデータがすべてきちんと作成されました！
           </p>
           <p>こまめにセーブをするのは、忘れないでくださいね。</p>

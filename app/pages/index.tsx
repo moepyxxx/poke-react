@@ -32,9 +32,7 @@ export default function Home() {
           持っているポケモン
         </button>
       </div>
-      <div>
-        <button onClick={save}>セーブする</button>
-      </div>
+      <div>{/* <button onClick={save}>セーブする</button> */}</div>
     </Template>
   );
 }

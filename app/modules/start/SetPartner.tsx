@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAppDispatch } from "@/hooks";
-import { Partner, setPartner } from "../../stores/playerSlices";
+import { addPokemons, Pokemon } from "../../stores/playerSlices";
 import { nameSchema } from "../../config/schema";
 import { selectablePartnerIds } from "@/config";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
@@ -15,7 +15,7 @@ type Props = {
   setScene: Dispatch<SetStateAction<Scene>>;
 };
 
-type FormData = Pick<Partner, "id" | "nickname"> & { isNickname: boolean };
+type FormData = Pick<Pokemon, "id" | "nickname"> & { isNickname: boolean };
 
 const schema = yup
   .object<FormData>({
@@ -57,11 +57,14 @@ export const SetPartner: React.FC<Props> = ({ setScene }) => {
   const onSubmit = handleSubmit((data) => {
     if (!currentSelectPartner) return;
     dispatch(
-      setPartner({
-        id: currentSelectPartner.id,
-        name: currentSelectPartner.name,
-        nickname: data.nickname,
-      })
+      addPokemons([
+        {
+          id: currentSelectPartner.id,
+          name: currentSelectPartner.name,
+          nickname: data.nickname,
+          isPartner: true,
+        },
+      ])
     );
     setScene("closingTalk");
   });

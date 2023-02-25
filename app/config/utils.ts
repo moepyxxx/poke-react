@@ -1,3 +1,5 @@
+import { pokemonBookRangeMax, pokemonBookRangeMin } from ".";
+
 export const parseJPPokemonName = (name: string): string => {
   switch (name) {
     case "chikorita":
@@ -19,7 +21,7 @@ export const randomResult = (probably: number): boolean => {
 };
 
 export const randomPokemonId = (): number => {
-  const max = 251;
-  const min = 161;
+  const max = pokemonBookRangeMax;
+  const min = pokemonBookRangeMin;
   return Math.floor(Math.random() * (max + 1 - min)) + min;
 };
