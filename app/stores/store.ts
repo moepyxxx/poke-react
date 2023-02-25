@@ -1,12 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { save, load } from "redux-localstorage-simple";
 import playerReducer from "./playerSlices";
-import parkReducer from "./parkSlices";
 
 export const store = configureStore({
   reducer: {
     player: playerReducer,
-    park: parkReducer,
   },
   preloadedState: load({
     states: ["player"],

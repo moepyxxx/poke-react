@@ -1,20 +1,21 @@
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { parkLocalStorageName } from "@/config";
+import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
 import { Template } from "@/modules/Template";
-import { gameEnd } from "@/stores/parkSlices";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-export default function Park() {
+export default function ParkIndex() {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const { park } = useAppSelector((state) => state);
+  const [park, setPark] = useLocalStorage<Park>(parkLocalStorageName, null);
 
   useEffect(() => {
-    if (!park.isStart || park.remainBallCount === 0) {
-      dispatch(gameEnd);
-      router.push("/");
-    }
-  }, [router, park]);
+    if (park) return;
+
+    setPark({
+      isStart: true,
+      remainBallCount: 20,
+    });
+  }, []);
 
   return (
     <Template>
@@ -22,7 +23,9 @@ export default function Park() {
         <p>現在いる場所：サファリパーク</p>
         <p>
           残りのボール：
-          <span suppressHydrationWarning>{park.remainBallCount}</span>
+          <span suppressHydrationWarning>
+            {park ? park.remainBallCount : 0}
+          </span>
         </p>
       </div>
       <div>

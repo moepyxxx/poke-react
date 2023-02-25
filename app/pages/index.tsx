@@ -5,7 +5,6 @@
 
 import { useAppDispatch } from "@/hooks";
 import { Template } from "@/modules/Template";
-import { gameStart } from "@/stores/parkSlices";
 import { useRouter } from "next/router";
 
 export default function Home() {
@@ -17,8 +16,6 @@ export default function Home() {
   };
 
   const start = () => {
-    // TODO 調査: 引数は必要ないはずだけどなぜか引数ないとTSエラーでるし引数入れても問題ない…
-    dispatch(gameStart(""));
     router.push("/park");
   };
 
