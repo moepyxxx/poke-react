@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { save, load } from "redux-localstorage-simple";
 import playerReducer from "./playerSlices";
+import playTimerReducer from "./playTimerSlices";
 
 export const store = configureStore({
   reducer: {
     player: playerReducer,
+    playTimer: playTimerReducer,
   },
   preloadedState: load({
     states: ["player"],
