@@ -41,8 +41,6 @@ export default function FieldIndex() {
   };
 
   useEffect(() => {
-    console.log("さがした！");
-
     if (isEncounter == null) {
       setResultText("");
       return;
@@ -63,8 +61,8 @@ export default function FieldIndex() {
     isCapturePokemon ? capture() : failure();
   }, [isCapturePokemon]);
 
-  const appearPokemon = () => {
-    setWildPokemon(fetchWildPokemon());
+  const appearPokemon = async () => {
+    setWildPokemon(await fetchWildPokemon());
   };
 
   const search = () => {
@@ -93,7 +91,6 @@ export default function FieldIndex() {
   const capture = () => {
     if (!wildPokemon) return;
     setResultText(`やった！${wildPokemon.name}を捕まえた！`);
-    console.log(park.capturePokemons, "park.capturePokemons");
     const newPokemons = [
       ...park.capturePokemons,
       {
