@@ -13,7 +13,8 @@ export default function ParkIndex() {
 
     setPark({
       isStart: true,
-      remainBallCount: 20,
+      remainBallCount: 4,
+      capturePokemons: [],
     });
   }, []);
 

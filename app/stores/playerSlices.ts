@@ -37,6 +37,9 @@ const reducers: SliceCaseReducers<Player> = {
   setPartner: (state, action: PayloadAction<Partner | null>) => {
     state.partner = action.payload;
   },
+  addPokemons: (state, action: PayloadAction<Pokemon[]>) => {
+    state.pokemons = [...state.pokemons, ...action.payload];
+  },
 };
 
 export const partnerSlice = createSlice<Player, SliceCaseReducers<Player>>({
@@ -45,7 +48,8 @@ export const partnerSlice = createSlice<Player, SliceCaseReducers<Player>>({
   reducers,
 });
 
-export const { setName, setPlayTime, setPartner } = partnerSlice.actions;
+export const { setName, setPlayTime, setPartner, addPokemons } =
+  partnerSlice.actions;
 
 export const selectPlayer = (state: RootState) => state.player;
 

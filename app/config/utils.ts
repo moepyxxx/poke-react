@@ -7,6 +7,19 @@ export const parseJPPokemonName = (name: string): string => {
     case "totodile":
       return "ワニノコ";
     default:
-      return "ピカチュウ";
+      return name;
   }
+};
+
+export const randomResult = (probably: number): boolean => {
+  const max = 10;
+  const min = 1;
+  const random = Math.floor(Math.random() * (max + 1 - min)) + min;
+  return random > probably;
+};
+
+export const randomPokemonId = (): number => {
+  const max = 251;
+  const min = 161;
+  return Math.floor(Math.random() * (max + 1 - min)) + min;
 };

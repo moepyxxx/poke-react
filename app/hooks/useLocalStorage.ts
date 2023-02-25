@@ -1,8 +1,10 @@
+import { Pokemon } from "@/stores/playerSlices";
 import { useState } from "react";
 
 export type Park = {
   isStart: boolean;
   remainBallCount: number;
+  capturePokemons: Pokemon[];
 };
 
 // see: https://usehooks.com/useLocalStorage/
