@@ -32,6 +32,9 @@ export default function Home() {
           持っているポケモン
         </button>
       </div>
+      <div>
+        <button onClick={() => router.push("/books")}>ポケモンずかん</button>
+      </div>
       <div>{/* <button onClick={save}>セーブする</button> */}</div>
     </Template>
   );

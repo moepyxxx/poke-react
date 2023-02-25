@@ -16,27 +16,45 @@ export default function Status() {
     player.pokemons.map((pokemon) => pokemon.id)
   );
 
+  const createdBookPokemons: PokeAPIPokemon[] = [];
+  for (
+    let id = pokemonBookRangeMinAddFirstPokemons;
+    id <= pokemonBookRangeMax;
+    id++
+  ) {
+    const findPokemon = capturePokemons.find((pokemon) => pokemon.id === id);
+    createdBookPokemons.push(
+      findPokemon
+        ? findPokemon
+        : {
+            id,
+            name: "?",
+            sprites: {
+              back_default: "",
+              front_default: "",
+            },
+          }
+    );
+  }
+
   return (
     <Template>
       <div>
-        <p>あなたのポケモン</p>
+        <p>あなたのずかん</p>
         <button onClick={() => router.push("/")}>サファリパーク前に戻る</button>
-        {player.pokemons.map((pokemon) => {
-          const bookPokemon = capturePokemons.find((p) => p.id === pokemon.id);
-          if (!bookPokemon) return <></>;
+        {createdBookPokemons.map((pokemon) => {
           return (
             <div key={pokemon.id}>
               <p>ID: {pokemon.id}</p>
               <p>なまえ：{pokemon.name}</p>
-              <p>ニックネーム：{pokemon.nickname}</p>
-              {bookPokemon.sprites.front_default === "" ? (
+              {pokemon.sprites.front_default === "" ? (
                 <></>
               ) : (
                 <Image
                   width="100"
                   height="100"
-                  src={bookPokemon.sprites.front_default}
-                  alt={bookPokemon.name}
+                  src={pokemon.sprites.front_default}
+                  alt={pokemon.name}
                 />
               )}
             </div>
