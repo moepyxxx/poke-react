@@ -116,6 +116,8 @@ export default function FieldIndex() {
   };
 
   const ToSearch = () => {
+    if (!park) return <></>;
+
     if (park.remainBallCount === 0) {
       return (
         <>
@@ -155,7 +157,7 @@ export default function FieldIndex() {
         </>
       );
     } else {
-      return <>チョットマッテネ</>;
+      return <p>チョットマッテネ</p>;
     }
   };
 
