@@ -13,7 +13,7 @@ export default function ParkIndex() {
   const [park, setPark] = useLocalStorage<Park>(parkLocalStorageName, null);
 
   useEffect(() => {
-    if (park) return;
+    if (park != null) return;
 
     setPark({
       isStart: true,
@@ -33,7 +33,7 @@ export default function ParkIndex() {
       <Quote>
         <Typography>
           残りのボールが0になるまでサファリパーク内を探索しましょう（ボールの残り：
-          {park.remainBallCount}）。
+          <span suppressHydrationWarning>{park?.remainBallCount}</span>）。
         </Typography>
       </Quote>
       {/* <Scene></Scene> */}
