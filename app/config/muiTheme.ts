@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 export const theme = createTheme({
   palette: {
@@ -15,5 +16,21 @@ export const theme = createTheme({
   },
   typography: {
     fontFamily: "DotGothic16",
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        ::-webkit-scrollbar{
+            width: 10px;
+        },
+        ::-webkit-scrollbar-corner {
+            background-color: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: ${grey[400]};
+            border-radius: 4px;
+        }
+        `,
+    },
   },
 });

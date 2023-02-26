@@ -4,7 +4,7 @@ import { Action, Controller } from "@/modules/Controller";
 import { Quote } from "@/modules/Quote";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
-import { Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -31,21 +31,22 @@ export default function Status() {
           const bookPokemon = capturePokemons.find((p) => p.id === pokemon.id);
           if (!bookPokemon) return <></>;
           return (
-            <div key={`${pokemon.id}-${index}`}>
-              <Typography>ID: {pokemon.id}</Typography>
-              <Typography>なまえ：{pokemon.name}</Typography>
-              <Typography>ニックネーム：{pokemon.nickname}</Typography>
-              {bookPokemon.sprites.front_default === "" ? (
-                <></>
-              ) : (
+            <Box key={`${pokemon.id}-${index}`}>
+              <Grid container sx={{ pb: 1 }} alignItems="center">
+                <Typography>No.{pokemon.id}</Typography>
                 <Image
-                  width="100"
-                  height="100"
-                  src={bookPokemon.sprites.front_default}
-                  alt={bookPokemon.name}
+                  width="44"
+                  height="44"
+                  src={
+                    bookPokemon.sprites.front_default === ""
+                      ? "/images/book_unknown_picture.svg"
+                      : bookPokemon.sprites.front_default
+                  }
+                  alt={`No.${pokemon.id}: ${pokemon.name}`}
                 />
-              )}
-            </div>
+                <Typography>{pokemon.name}</Typography>
+              </Grid>
+            </Box>
           );
         })}
       </Scene>

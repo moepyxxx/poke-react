@@ -9,7 +9,7 @@ import { Action, Controller } from "@/modules/Controller";
 import { Quote } from "@/modules/Quote";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -32,7 +32,7 @@ export default function Status() {
         ? findPokemon
         : {
             id,
-            name: "?",
+            name: "???",
             sprites: {
               back_default: "",
               front_default: "",
@@ -56,18 +56,20 @@ export default function Status() {
         {createdBookPokemons.map((pokemon) => {
           return (
             <Box key={pokemon.id}>
-              <Typography>ID: {pokemon.id}</Typography>
-              <Typography>なまえ：{pokemon.name}</Typography>
-              {pokemon.sprites.front_default === "" ? (
-                <></>
-              ) : (
+              <Grid container sx={{ pb: 1 }} alignItems="center">
+                <Typography>No.{pokemon.id}</Typography>
                 <Image
-                  width="100"
-                  height="100"
-                  src={pokemon.sprites.front_default}
-                  alt={pokemon.name}
+                  width="44"
+                  height="44"
+                  src={
+                    pokemon.sprites.front_default === ""
+                      ? "/images/book_unknown_picture.svg"
+                      : pokemon.sprites.front_default
+                  }
+                  alt={`No.${pokemon.id}: ${pokemon.name}`}
                 />
-              )}
+                <Typography>{pokemon.name}</Typography>
+              </Grid>
             </Box>
           );
         })}

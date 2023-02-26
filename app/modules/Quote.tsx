@@ -14,6 +14,7 @@ export const Quote: React.FC<Props> = ({ children }) => {
         bottom: 24,
         p: 2,
         height: 84,
+        zIndex: 1,
         ...SingleBoxBorder,
       }}
     >

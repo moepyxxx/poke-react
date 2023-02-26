@@ -18,6 +18,7 @@ export const Controller: React.FC<Props> = ({ actions }) => {
         height: "auto",
         bottom: 128,
         right: 24,
+        zIndex: 1,
         ...SingleBoxBorder,
         p: 1,
       }}
