@@ -12,6 +12,13 @@ import { theme } from "@/config/muiTheme";
 
 const queryClient = new QueryClient();
 
+export const positionCenter = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+};
+
 const doubleBorder = {
   border: `${theme.palette.text.primary} 4px solid`,
   position: "relative",
@@ -21,11 +28,8 @@ const doubleBorder = {
     content: '""',
     background: "transparent",
     border: `${theme.palette.text.primary} 2px solid`,
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
     zIndex: "-1",
+    ...positionCenter,
   },
 };
 

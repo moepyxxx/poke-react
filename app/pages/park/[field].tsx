@@ -7,10 +7,11 @@ import { Action, Controller } from "@/modules/Controller";
 import { Quote } from "@/modules/Quote";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { positionCenter } from "../_app";
 
 type FieldPath = "kusamura";
 
@@ -50,7 +51,7 @@ export default function FieldIndex() {
       return;
     }
     if (isEncounter) {
-      setResultText("ポケモンが現れた！");
+      setResultText(`あ、やせいの${wildPokemon?.name}があらわれた！`);
       appearPokemon();
       return;
     }
@@ -59,6 +60,11 @@ export default function FieldIndex() {
       return;
     }
   }, [searchCount]);
+
+  useEffect(() => {
+    if (park.remainBallCount !== 0) return;
+    setResultText("ああ、手持ちのボールがなくなってしまいました！");
+  }, [park.capturePokemons]);
 
   useEffect(() => {
     if (isCapturePokemon == null) return;
@@ -121,25 +127,29 @@ export default function FieldIndex() {
     setIsEncounter(null);
   };
 
-  const ToSearch = () => {
-    if (!park || park.remainBallCount !== 0) return <></>;
-    return (
-      <Typography>ああ、手持ちのボールがなくなってしまいました！</Typography>
-    );
-  };
-
   const AppearPokemon = () => {
     if (!wildPokemon) return <></>;
     return (
-      <>
-        <p>{wildPokemon.name}</p>
-        <Image
-          width="100"
-          height="100"
-          src={wildPokemon.sprites.front_default}
-          alt={wildPokemon.name}
-        />
-      </>
+      <Box sx={{ ...positionCenter }}>
+        {isCapturePokemon ? (
+          <Image
+            width="40"
+            height="40"
+            src="/images/monster_ball.svg"
+            alt="モンスターボール"
+          />
+        ) : (
+          <>
+            <Typography align="center">{wildPokemon.name}</Typography>
+            <Image
+              width="100"
+              height="100"
+              src={wildPokemon.sprites.front_default}
+              alt={wildPokemon.name}
+            />
+          </>
+        )}
+      </Box>
     );
   };
 
@@ -170,7 +180,7 @@ export default function FieldIndex() {
       hidden: !isEncounter || !wildPokemon || isCapturePokemon === true,
     },
     {
-      label: "ボールを投げる",
+      label: `ボール（残り${park.remainBallCount}）`,
       fn: throwBall,
       hidden: !isEncounter || !wildPokemon || isCapturePokemon === true,
     },
@@ -189,7 +199,7 @@ export default function FieldIndex() {
             {park ? park.remainBallCount : 0}
           </span>
         </p>
-        {isEncounter ? <AppearPokemon /> : <ToSearch />}
+        {isEncounter ? <AppearPokemon /> : <></>}
       </Scene>
       <Controller actions={actions} />
     </div>

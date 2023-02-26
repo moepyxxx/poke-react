@@ -30,15 +30,13 @@ export default function ParkIndex() {
   return (
     <>
       <SceneTitle title="サファリパーク内" />
-      <Quote>残りのボールが0になるまでサファリパーク内を探索しましょう。</Quote>
-      <Scene>
+      <Quote>
         <Typography>
-          残りのボール：
-          <span suppressHydrationWarning>
-            {park ? park.remainBallCount : 0}
-          </span>
+          残りのボールが0になるまでサファリパーク内を探索しましょう（ボールの残り：
+          {park.remainBallCount}）。
         </Typography>
-      </Scene>
+      </Quote>
+      {/* <Scene></Scene> */}
       <Controller actions={actions} />
     </>
   );
