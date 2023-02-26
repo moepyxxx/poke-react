@@ -9,6 +9,7 @@ import { Action, Controller } from "@/modules/Controller";
 import { Quote } from "@/modules/Quote";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
+import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -41,22 +42,22 @@ export default function Status() {
   }
 
   const actions: Action[] = [
-    { label: "サファリパーク前に戻る", fn: () => router.push("/") },
+    { label: "パーク前に戻る", fn: () => router.push("/") },
   ];
 
   return (
-    <div>
+    <>
       <SceneTitle title="ポケモンずかん" />
       <Controller actions={actions} />
       <Quote>
-        <p>あなたのポケモンずかんです。</p>
+        <Typography>あなたのポケモンずかんです。</Typography>
       </Quote>
       <Scene>
         {createdBookPokemons.map((pokemon) => {
           return (
-            <div key={pokemon.id}>
-              <p>ID: {pokemon.id}</p>
-              <p>なまえ：{pokemon.name}</p>
+            <Box key={pokemon.id}>
+              <Typography>ID: {pokemon.id}</Typography>
+              <Typography>なまえ：{pokemon.name}</Typography>
               {pokemon.sprites.front_default === "" ? (
                 <></>
               ) : (
@@ -67,10 +68,10 @@ export default function Status() {
                   alt={pokemon.name}
                 />
               )}
-            </div>
+            </Box>
           );
         })}
       </Scene>
-    </div>
+    </>
   );
 }

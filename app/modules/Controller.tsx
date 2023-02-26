@@ -1,3 +1,6 @@
+import { SingleBoxBorder } from "@/pages/_app";
+import { Box, Button } from "@mui/material";
+
 export type Action = {
   label: string;
   fn: () => void;
@@ -8,17 +11,29 @@ type Props = {
 };
 export const Controller: React.FC<Props> = ({ actions }) => {
   return (
-    <>
+    <Box
+      sx={{
+        position: "absolute",
+        width: 148,
+        height: "auto",
+        bottom: 128,
+        right: 24,
+        ...SingleBoxBorder,
+        p: 1,
+      }}
+    >
       {actions.map((action, index) => {
         if (action.hidden) {
-          return <div key={index}></div>;
+          return <Box key={index}></Box>;
         }
         return (
-          <div key={index}>
-            <button onClick={action.fn}>{action.label}</button>
-          </div>
+          <Box key={index}>
+            <Button variant="text" onClick={action.fn}>
+              {action.label}
+            </Button>
+          </Box>
         );
       })}
-    </>
+    </Box>
   );
 };

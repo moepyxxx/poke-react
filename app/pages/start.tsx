@@ -5,6 +5,7 @@ import { SceneTitle } from "@/modules/SceneTitle";
 import { SetPartner } from "@/modules/start/SetPartner";
 import { SetPlayerName } from "@/modules/start/SetPlayerName";
 import { gameStart } from "@/stores/saveSlices";
+import { Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -46,27 +47,46 @@ export default function Start() {
   const SceneComponent = () => {
     switch (scene) {
       case "setPlayerName":
-        return <SetPlayerName setScene={setScene} />;
+        return (
+          <>
+            <Quote>
+              <Typography>はじめにあなたの名前を教えてください</Typography>
+            </Quote>
+            <SetPlayerName setScene={setScene} />
+          </>
+        );
       case "greeting":
         return (
           <>
-            <p>こんにちは、{state.save.name}さん！</p>
-            <p>サファリパークだけできるポケモンへようこそ。</p>
-            <p>いっぱい遊んでくださいね。</p>
+            <Typography>こんにちは、{state.save.name}さん！</Typography>
+            <Typography>
+              サファリパークだけできるポケモンへようこそ。たくさん遊んで月曜日にそなえましょう！
+            </Typography>
           </>
         );
       case "setFirstPokemon":
-        return <SetPartner setScene={setScene} />;
-      case "closingTalk":
         return (
           <>
-            <p>
+            <Quote>
+              <Typography>
+                さあ、まずは最初のパートナーをきめましょう！
+              </Typography>
+            </Quote>
+            <SetPartner setScene={setScene} />
+          </>
+        );
+      case "closingTalk":
+        return (
+          <Quote>
+            <Typography>
               {state.save.name}
               さんとパートナーの{state.local.pokemons[0].name}
               の、最初のデータがすべてきちんと作成されました！
-            </p>
-            <p>こまめにセーブをするのは、忘れないでくださいね。</p>
-          </>
+            </Typography>
+            <Typography>
+              こまめにセーブをするのは、忘れないでくださいね。
+            </Typography>
+          </Quote>
         );
       default:
         return <></>;
@@ -77,7 +97,9 @@ export default function Start() {
     <>
       <SceneTitle title="はじめに" />
       <Quote>
-        <p>こんにちは、サファリパークの冒険をはじめましょう。</p>
+        <Typography>
+          こんにちは、サファリパークの冒険をはじめましょう。
+        </Typography>
       </Quote>
       <Scene>
         <SceneComponent />

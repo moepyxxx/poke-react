@@ -6,6 +6,7 @@ import { Quote } from "@/modules/Quote";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { addPokemons } from "@/stores/localDataSlices";
+import { Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -34,11 +35,11 @@ export default function ParkResult() {
     <>
       <SceneTitle title="たんけん結果" />
       <Quote>
-        <p>
+        <Typography>
           おめでとう。あなたはサファリパークでポケモンを
           <span suppressHydrationWarning>{park.capturePokemons.length}</span>
           ひきゲットしました！
-        </p>
+        </Typography>
       </Quote>
       <Scene>
         {park.capturePokemons.map((pokemon, index) => {

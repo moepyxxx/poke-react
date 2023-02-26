@@ -10,6 +10,7 @@ import { Quote } from "@/modules/Quote";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { setPokemons } from "@/stores/saveSlices";
+import { Typography } from "@mui/material";
 import { useRouter } from "next/router";
 
 export default function Home() {
@@ -29,8 +30,8 @@ export default function Home() {
   };
 
   const actions: Action[] = [
-    { label: "サファリパークへいく", fn: start },
-    { label: "持っているポケモン", fn: () => router.push("/status") },
+    { label: "パークへ入る", fn: start },
+    { label: "ポケモン", fn: () => router.push("/status") },
     { label: "ポケモンずかん", fn: () => router.push("/books") },
     { label: "セーブする", fn: save },
   ];
@@ -39,7 +40,7 @@ export default function Home() {
     <>
       <SceneTitle title="サファリパーク前" />
       <Quote>
-        <p>メニューを選んでください。</p>
+        <Typography>メニューを選んでください。</Typography>
       </Quote>
       <Scene>
         <Controller actions={actions} />

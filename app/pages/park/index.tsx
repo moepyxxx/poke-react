@@ -4,6 +4,7 @@ import { Action, Controller } from "@/modules/Controller";
 import { Quote } from "@/modules/Quote";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
+import { Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -31,12 +32,12 @@ export default function ParkIndex() {
       <SceneTitle title="サファリパーク内" />
       <Quote>残りのボールが0になるまでサファリパーク内を探索しましょう。</Quote>
       <Scene>
-        <p>
+        <Typography>
           残りのボール：
           <span suppressHydrationWarning>
             {park ? park.remainBallCount : 0}
           </span>
-        </p>
+        </Typography>
       </Scene>
       <Controller actions={actions} />
     </>

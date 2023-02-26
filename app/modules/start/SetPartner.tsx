@@ -72,7 +72,6 @@ export const SetPartner: React.FC<Props> = ({ setScene }) => {
 
   return (
     <>
-      <h2>最初のパートナーを教えてください。</h2>
       <form onSubmit={onSubmit}>
         <select
           {...register("id", {

@@ -16,7 +16,7 @@ type FieldPath = "kusamura";
 const parseFieldName = (path: FieldPath): string => {
   switch (path) {
     case "kusamura":
-      return "草むら";
+      return "くさむら";
     default:
       return "";
   }
@@ -45,7 +45,7 @@ export default function FieldIndex() {
 
   useEffect(() => {
     if (isEncounter == null) {
-      setResultText("");
+      setResultText(`${parseFieldName(field)}でポケモンを探しましょう！`);
       return;
     }
     if (isEncounter) {
@@ -169,7 +169,7 @@ export default function FieldIndex() {
 
   const actions: Action[] = [
     {
-      label: "サファリパークを出る",
+      label: "パークを出る",
       fn: goToResult,
       hidden: isEncounter || park.remainBallCount !== 0,
     },
@@ -179,12 +179,12 @@ export default function FieldIndex() {
       hidden: isEncounter || park.remainBallCount === 0,
     },
     {
-      label: "他の場所を探す",
+      label: "別のフィールドへ",
       fn: () => router.push("/park"),
       hidden: isEncounter || park.remainBallCount === 0,
     },
     {
-      label: "次のポケモンを探す",
+      label: "フィールドへ",
       fn: searchOther,
       hidden: !isEncounter || !wildPokemon || !isCapturePokemon,
     },

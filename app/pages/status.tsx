@@ -4,6 +4,7 @@ import { Action, Controller } from "@/modules/Controller";
 import { Quote } from "@/modules/Quote";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
+import { Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -14,10 +15,8 @@ export default function Status() {
     local.pokemons.map((pokemon) => pokemon.id)
   );
 
-  console.log(local);
-
   const actions: Action[] = [
-    { label: "サファリパーク前に戻る", fn: () => router.push("/") },
+    { label: "パーク前に戻る", fn: () => router.push("/") },
   ];
 
   return (
@@ -25,7 +24,7 @@ export default function Status() {
       <SceneTitle title="あなたのポケモン" />
       <Controller actions={actions} />
       <Quote>
-        <p>あなたのポケモンのステータスです。</p>
+        <Typography>あなたのポケモンのステータスです。</Typography>
       </Quote>
       <Scene>
         {local.pokemons.map((pokemon, index) => {
@@ -33,9 +32,9 @@ export default function Status() {
           if (!bookPokemon) return <></>;
           return (
             <div key={`${pokemon.id}-${index}`}>
-              <p>ID: {pokemon.id}</p>
-              <p>なまえ：{pokemon.name}</p>
-              <p>ニックネーム：{pokemon.nickname}</p>
+              <Typography>ID: {pokemon.id}</Typography>
+              <Typography>なまえ：{pokemon.name}</Typography>
+              <Typography>ニックネーム：{pokemon.nickname}</Typography>
               {bookPokemon.sprites.front_default === "" ? (
                 <></>
               ) : (

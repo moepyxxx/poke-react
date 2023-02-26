@@ -1,7 +1,10 @@
+import { theme } from "@/config/muiTheme";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { usePlayTime } from "@/hooks/usePlayTime";
+import { SingleBoxBorder } from "@/pages/_app";
 import { setPokemons } from "@/stores/localDataSlices";
+import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -24,11 +27,19 @@ export const Config: React.FC = () => {
     dispatch(setPokemons(state.save.pokemons));
   }, []);
   return (
-    <>
-      <p suppressHydrationWarning>プレイじかん：{playtime}</p>
-      <p>
+    <Box
+      sx={{
+        position: "absolute",
+        top: 24,
+        left: 24,
+        ...SingleBoxBorder,
+        p: 1.5,
+      }}
+    >
+      <Typography suppressHydrationWarning>プレイじかん：{playtime}</Typography>
+      <Typography>
         なまえ：<span suppressHydrationWarning>{save.name}</span>
-      </p>
-    </>
+      </Typography>
+    </Box>
   );
 };

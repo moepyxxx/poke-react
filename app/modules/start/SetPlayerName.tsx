@@ -39,7 +39,6 @@ export const SetPlayerName: React.FC<Props> = ({ setScene }) => {
 
   return (
     <>
-      <h2>はじめにあなたの名前を教えてください</h2>
       <form onSubmit={onSubmit}>
         <input {...register("name")} />
         <p>{errors.name?.message}</p>
