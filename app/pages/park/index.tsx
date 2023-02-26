@@ -1,6 +1,6 @@
 import { parkLocalStorageName } from "@/config";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
-import { Template } from "@/modules/Template";
+import { SceneTitle } from "@/modules/SceneTitle";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -19,9 +19,9 @@ export default function ParkIndex() {
   }, []);
 
   return (
-    <Template>
+    <>
       <div>
-        <p>現在いる場所：サファリパーク</p>
+        <SceneTitle title="サファリパーク内" />
         <p>
           残りのボール：
           <span suppressHydrationWarning>
@@ -34,6 +34,6 @@ export default function ParkIndex() {
           草むらをさがす
         </button>
       </div>
-    </Template>
+    </>
   );
 }

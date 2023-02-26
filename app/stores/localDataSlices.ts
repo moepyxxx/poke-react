@@ -11,6 +11,9 @@ const initialState: LocalData = {
 };
 
 const reducers: SliceCaseReducers<LocalData> = {
+  setPokemons: (state, action: PayloadAction<Pokemon[]>) => {
+    state.pokemons = [...action.payload];
+  },
   addPokemons: (state, action: PayloadAction<Pokemon[]>) => {
     state.pokemons = [...state.pokemons, ...action.payload];
   },
@@ -25,7 +28,7 @@ export const localDataSlice = createSlice<
   reducers,
 });
 
-export const { addPokemons } = localDataSlice.actions;
+export const { setPokemons, addPokemons } = localDataSlice.actions;
 
 export const selectLocalData = (state: RootState) => state;
 

@@ -1,3 +1,5 @@
+import { Action, Controller } from "@/modules/Controller";
+import { SceneTitle } from "@/modules/SceneTitle";
 import { SetPartner } from "@/modules/start/SetPartner";
 import { SetPlayerName } from "@/modules/start/SetPlayerName";
 import { gameStart } from "@/stores/saveSlices";
@@ -26,33 +28,54 @@ export default function Start() {
     router.push("/");
   };
 
-  switch (scene) {
-    case "setPlayerName":
-      return <SetPlayerName setScene={setScene} />;
-    case "greeting":
-      return (
-        <>
-          <p>こんにちは、{state.save.name}さん！</p>
-          <p>サファリパークだけできるポケモンへようこそ。</p>
-          <p>いっぱい遊んでくださいね。</p>
-          <button onClick={() => setScene("setFirstPokemon")}>次へ</button>
-        </>
-      );
-    case "setFirstPokemon":
-      return <SetPartner setScene={setScene} />;
-    case "closingTalk":
-      return (
-        <>
-          <p>
-            {state.save.name}
-            さんとパートナーの{state.local.pokemons[0].name}
-            の、最初のデータがすべてきちんと作成されました！
-          </p>
-          <p>こまめにセーブをするのは、忘れないでくださいね。</p>
-          <button onClick={start}>ゲームスタート</button>
-        </>
-      );
-    default:
-      return <></>;
-  }
+  const actions: Action[] = [
+    {
+      label: "次へ",
+      fn: () => setScene("setFirstPokemon"),
+      hidden: scene !== "setPlayerName",
+    },
+    {
+      label: "ゲームスタート",
+      fn: start,
+      hidden: scene !== "closingTalk",
+    },
+  ];
+
+  const Scene = () => {
+    switch (scene) {
+      case "setPlayerName":
+        return <SetPlayerName setScene={setScene} />;
+      case "greeting":
+        return (
+          <>
+            <p>こんにちは、{state.save.name}さん！</p>
+            <p>サファリパークだけできるポケモンへようこそ。</p>
+            <p>いっぱい遊んでくださいね。</p>
+          </>
+        );
+      case "setFirstPokemon":
+        return <SetPartner setScene={setScene} />;
+      case "closingTalk":
+        return (
+          <>
+            <p>
+              {state.save.name}
+              さんとパートナーの{state.local.pokemons[0].name}
+              の、最初のデータがすべてきちんと作成されました！
+            </p>
+            <p>こまめにセーブをするのは、忘れないでくださいね。</p>
+          </>
+        );
+      default:
+        return <></>;
+    }
+  };
+
+  return (
+    <>
+      <SceneTitle title="はじめに" />
+      <Scene />
+      <Controller actions={actions} />
+    </>
+  );
 }

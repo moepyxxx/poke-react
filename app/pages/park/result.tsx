@@ -1,6 +1,7 @@
 import { parkLocalStorageName } from "@/config";
 import { useAppDispatch } from "@/hooks";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
+import { SceneTitle } from "@/modules/SceneTitle";
 import { addPokemons } from "@/stores/localDataSlices";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -17,7 +18,7 @@ export default function ParkResult() {
   }, []);
 
   const returnToTop = () => {
-    dispatch(addPokemons(park.capturePokemons));
+    dispatch(setPokemons(park.capturePokemons));
     setPark(null);
     router.push("/");
   };
@@ -26,6 +27,7 @@ export default function ParkResult() {
 
   return (
     <>
+      <SceneTitle title="たんけん結果" />
       <p>
         おめでとう。あなたはサファリパークでポケモンを
         <span suppressHydrationWarning>{park.capturePokemons.length}</span>

@@ -3,8 +3,7 @@ import { PokeAPIPokemon } from "@/config/types";
 import { randomResult } from "@/config/utils";
 import { useFetchWildPokemon } from "@/hooks/useFetchWildPokemon";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
-import { usePlayTime } from "@/hooks/usePlayTime";
-import { Template } from "@/modules/Template";
+import { SceneTitle } from "@/modules/SceneTitle";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -163,18 +162,14 @@ export default function FieldIndex() {
   };
 
   return (
-    <Template>
-      <div>
-        <p>現在いる場所：サファリパーク {parseFieldName(field)}</p>
-        <p>
-          残りのボール：
-          <span suppressHydrationWarning>
-            {park ? park.remainBallCount : 0}
-          </span>
-        </p>
-        <p>{resultText}</p>
-        {isEncounter ? <AppearPokemon /> : <ToSearch />}
-      </div>
-    </Template>
+    <div>
+      <SceneTitle title={`サファリパーク内 - ${parseFieldName(field)}`} />
+      <p>
+        残りのボール：
+        <span suppressHydrationWarning>{park ? park.remainBallCount : 0}</span>
+      </p>
+      <p>{resultText}</p>
+      {isEncounter ? <AppearPokemon /> : <ToSearch />}
+    </div>
   );
 }
