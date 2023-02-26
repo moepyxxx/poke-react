@@ -182,7 +182,7 @@
 <line y1="-0.5" x2="63.6396" y2="-0.5" transform="matrix(0.707107 0.707107 0.707107 -0.707107 147 34)" stroke="#A3A3A3"/>
 <line x1="196.038" y1="34.6464" x2="221.354" y2="59.9622" stroke="#A3A3A3"/>
 <rect x="62" y="34" width="160" height="51" fill="#A3A3A3" fill-opacity="0.72"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M58.4828 5H233.517H287V25V175H234H233.517H228.655H177V155H228.655V90H233.517V25H58.4828V90H63.3448V155H108V175H63.3448H63H58.4828H5V25V5H58.4828Z" fill="#9CDF7D"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M53 5H233.517H287V25V175H234H233.517H228.655H177V155H228.655V90H233.517V25H53V95H57V155H108V175H57H53H5V25V5H53Z" fill="#9CDF7D"/>
 <rect x="101" y="160" width="1" height="1" fill="#65AE6C"/>
 <rect x="101" y="167" width="1" height="1" fill="#65AE6C"/>
 <rect x="81" y="160" width="1" height="1" fill="#65AE6C"/>
