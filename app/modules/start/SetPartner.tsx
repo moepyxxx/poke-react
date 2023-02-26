@@ -4,12 +4,13 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAppDispatch } from "@/hooks";
-import { addPokemons, Pokemon } from "../../stores/playerSlices";
+import { Pokemon } from "../../stores/saveSlices";
 import { nameSchema } from "../../config/schema";
 import { selectablePartnerIds } from "@/config";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
 import Image from "next/image";
 import { PokeAPIPokemon } from "@/config/types";
+import { addPokemons } from "@/stores/localDataSlices";
 
 type Props = {
   setScene: Dispatch<SetStateAction<Scene>>;

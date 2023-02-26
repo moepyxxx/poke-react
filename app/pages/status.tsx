@@ -1,8 +1,3 @@
-import {
-  pokemonBookRangeMax,
-  pokemonBookRangeMinAddFirstPokemons,
-} from "@/config";
-import { PokeAPIPokemon } from "@/config/types";
 import { useAppSelector } from "@/hooks";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
 import { Template } from "@/modules/Template";
@@ -11,9 +6,9 @@ import { useRouter } from "next/router";
 
 export default function Status() {
   const router = useRouter();
-  const player = useAppSelector((state) => state.player);
+  const save = useAppSelector((state) => state.save);
   const capturePokemons = useFetchPokemons(
-    player.pokemons.map((pokemon) => pokemon.id)
+    save.pokemons.map((pokemon) => pokemon.id)
   );
 
   return (
@@ -21,7 +16,7 @@ export default function Status() {
       <div>
         <p>あなたのポケモン</p>
         <button onClick={() => router.push("/")}>サファリパーク前に戻る</button>
-        {player.pokemons.map((pokemon) => {
+        {save.pokemons.map((pokemon) => {
           const bookPokemon = capturePokemons.find((p) => p.id === pokemon.id);
           if (!bookPokemon) return <></>;
           return (

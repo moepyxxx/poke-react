@@ -1,28 +1,20 @@
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { setPlayTimer } from "@/stores/playTimerSlices";
-import { useEffect, useState } from "react";
+import { usePlayTime } from "@/hooks/usePlayTime";
+import { addPokemons } from "@/stores/localDataSlices";
+import { useEffect } from "react";
 
+// TODO: middleware的な処理なのでmiddlewareでlocalStorageの参照をできる道を探したい
 export const Global: React.FC = () => {
-  const player = useAppSelector((state) => state.player);
-  const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [playtime] = usePlayTime();
   const dispatch = useAppDispatch();
-
-  let timerId: NodeJS.Timer;
+  const state = useAppSelector((state) => state);
 
   useEffect(() => {
-    const timer = () => {
-      setElapsedTime((elapsedTime) => elapsedTime + 1);
-      dispatch(setPlayTimer(elapsedTime));
-    };
-    timerId = setInterval(timer, 1000);
-    return () => {
-      clearInterval(timerId);
-    };
+    dispatch(addPokemons(state.save.pokemons));
   }, []);
-
   return (
     <>
-      <p>{elapsedTime + player.playTime}</p>
+      <p suppressHydrationWarning>{playtime}</p>
     </>
   );
 };

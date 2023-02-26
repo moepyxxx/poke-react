@@ -3,6 +3,7 @@ import { PokeAPIPokemon } from "@/config/types";
 import { randomResult } from "@/config/utils";
 import { useFetchWildPokemon } from "@/hooks/useFetchWildPokemon";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
+import { usePlayTime } from "@/hooks/usePlayTime";
 import { Template } from "@/modules/Template";
 import Image from "next/image";
 import { useRouter } from "next/router";

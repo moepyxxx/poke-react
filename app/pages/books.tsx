@@ -11,9 +11,9 @@ import { useRouter } from "next/router";
 
 export default function Status() {
   const router = useRouter();
-  const player = useAppSelector((state) => state.player);
+  const save = useAppSelector((state) => state.save);
   const capturePokemons = useFetchPokemons(
-    player.pokemons.map((pokemon) => pokemon.id)
+    save.pokemons.map((pokemon) => pokemon.id)
   );
 
   const createdBookPokemons: PokeAPIPokemon[] = [];

@@ -7,21 +7,21 @@ type Props = {
 };
 export const Template: React.FC<Props> = ({ children }) => {
   const router = useRouter();
-  const player = useAppSelector((state) => state.player);
+  const save = useAppSelector((state) => state.save);
 
   useEffect(() => {
-    if (!player.isSet) {
+    if (!save.isGameStart) {
       router.push("start");
     }
-  }, [router, player]);
+  }, [router, save]);
 
   return (
     <>
       <p>
-        なまえ：<span suppressHydrationWarning>{player.name}</span>
+        なまえ：<span suppressHydrationWarning>{save.name}</span>
       </p>
       <p>
-        プレイ時間：<span suppressHydrationWarning>{player.playTime}</span>
+        プレイ時間：<span suppressHydrationWarning>{save.playTime}</span>
       </p>
       {children}
     </>

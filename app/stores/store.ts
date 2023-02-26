@@ -1,20 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { save, load } from "redux-localstorage-simple";
-import playerReducer from "./playerSlices";
-import playTimerReducer from "./playTimerSlices";
+import saveReducer from "./saveSlices";
+import localReducer from "./localDataSlices";
 
 export const store = configureStore({
   reducer: {
-    player: playerReducer,
-    playTimer: playTimerReducer,
+    save: saveReducer,
+    local: localReducer,
   },
   preloadedState: load({
-    states: ["player"],
+    states: ["save"],
   }),
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       save({
-        states: ["player"],
+        states: ["save"],
       })
     ),
 });

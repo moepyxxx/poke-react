@@ -1,4 +1,4 @@
-import { Pokemon } from "@/stores/playerSlices";
+import { Pokemon } from "@/stores/saveSlices";
 import { useState } from "react";
 
 export type Park = {

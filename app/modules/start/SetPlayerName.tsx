@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAppDispatch } from "@/hooks";
-import { setName } from "../../stores/playerSlices";
+import { setName } from "../../stores/saveSlices";
 import { nameSchema } from "../../config/schema";
 
 type Props = {

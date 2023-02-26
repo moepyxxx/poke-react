@@ -1,7 +1,7 @@
 import { parkLocalStorageName } from "@/config";
 import { useAppDispatch } from "@/hooks";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
-import { addPokemons } from "@/stores/playerSlices";
+import { addPokemons } from "@/stores/localDataSlices";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 

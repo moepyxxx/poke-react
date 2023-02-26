@@ -3,16 +3,22 @@
 // import { Inter } from "@next/font/google";
 // import styles from "@/styles/Home.module.css";
 
-import { useAppDispatch } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { usePlayTime } from "@/hooks/usePlayTime";
 import { Template } from "@/modules/Template";
+import { setPokemons } from "@/stores/saveSlices";
 import { useRouter } from "next/router";
 
 export default function Home() {
   const router = useRouter();
+  const state = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
+  const [_, setSavePlayTime] = usePlayTime();
 
   const save = () => {
-    console.log("save");
+    dispatch(setPokemons([...state.save.pokemons, ...state.local.pokemons]));
+    setSavePlayTime();
+    console.log("セーブできました！");
   };
 
   const start = () => {
@@ -35,7 +41,9 @@ export default function Home() {
       <div>
         <button onClick={() => router.push("/books")}>ポケモンずかん</button>
       </div>
-      <div>{/* <button onClick={save}>セーブする</button> */}</div>
+      <div>
+        <button onClick={save}>セーブする</button>
+      </div>
     </Template>
   );
 }
