@@ -14,6 +14,8 @@ export default function Status() {
     local.pokemons.map((pokemon) => pokemon.id)
   );
 
+  console.log(local);
+
   const actions: Action[] = [
     { label: "サファリパーク前に戻る", fn: () => router.push("/") },
   ];
@@ -26,11 +28,11 @@ export default function Status() {
         <p>あなたのポケモンのステータスです。</p>
       </Quote>
       <Scene>
-        {local.pokemons.map((pokemon) => {
+        {local.pokemons.map((pokemon, index) => {
           const bookPokemon = capturePokemons.find((p) => p.id === pokemon.id);
           if (!bookPokemon) return <></>;
           return (
-            <div key={pokemon.id}>
+            <div key={`${pokemon.id}-${index}`}>
               <p>ID: {pokemon.id}</p>
               <p>なまえ：{pokemon.name}</p>
               <p>ニックネーム：{pokemon.nickname}</p>

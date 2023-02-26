@@ -34,7 +34,7 @@ export default function Start() {
     {
       label: "次へ",
       fn: () => setScene("setFirstPokemon"),
-      hidden: scene !== "setPlayerName",
+      hidden: scene !== "greeting",
     },
     {
       label: "ゲームスタート",
