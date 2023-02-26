@@ -44,9 +44,13 @@ export default function ParkResult() {
       <Scene>
         {park.capturePokemons.map((pokemon, index) => {
           return (
-            <p key={`${index}-${pokemon.id}`} suppressHydrationWarning>
+            <Typography
+              align="center"
+              key={`${index}-${pokemon.id}`}
+              suppressHydrationWarning
+            >
               {pokemon.name}
-            </p>
+            </Typography>
           );
         })}
       </Scene>

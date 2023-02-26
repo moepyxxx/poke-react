@@ -47,7 +47,11 @@ export default function FieldIndex() {
 
   useEffect(() => {
     if (isEncounter == null) {
-      setResultText(`${parseFieldName(field)}でポケモンを探しましょう！`);
+      setResultText(
+        `${parseFieldName(field)}でポケモンを探しましょう！（ボールの残り：${
+          park.remainBallCount
+        }）`
+      );
       return;
     }
     if (isEncounter) {
@@ -61,10 +65,10 @@ export default function FieldIndex() {
     }
   }, [searchCount]);
 
-  useEffect(() => {
-    if (park.remainBallCount !== 0) return;
-    setResultText("ああ、手持ちのボールがなくなってしまいました！");
-  }, [park.capturePokemons]);
+  // useEffect(() => {
+  //   if (park.remainBallCount !== 0) return;
+  //   setResultText("ああ、手持ちのボールがなくなってしまいました！");
+  // }, [park.capturePokemons]);
 
   useEffect(() => {
     if (isCapturePokemon == null) return;
@@ -192,15 +196,7 @@ export default function FieldIndex() {
       <Quote>
         <Typography>{resultText}</Typography>
       </Quote>
-      <Scene>
-        <p>
-          残りのボール：
-          <span suppressHydrationWarning>
-            {park ? park.remainBallCount : 0}
-          </span>
-        </p>
-        {isEncounter ? <AppearPokemon /> : <></>}
-      </Scene>
+      <Scene>{isEncounter ? <AppearPokemon /> : <></>}</Scene>
       <Controller actions={actions} />
     </div>
   );
