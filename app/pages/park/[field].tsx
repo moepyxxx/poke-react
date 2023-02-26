@@ -65,6 +65,7 @@ export default function FieldIndex() {
   }, [isCapturePokemon]);
 
   const appearPokemon = async () => {
+    // TODO: ポケモン出現の頻度は調整したい、ルギアすぐ出てくる
     setWildPokemon(await fetchWildPokemon());
   };
 
@@ -88,6 +89,7 @@ export default function FieldIndex() {
       remainBallCount: park.remainBallCount - 1,
     });
 
+    // TODO: 捕まえやすさロジックにゲーム性を持たせたい
     setIsCapturePokemon(randomResult(3));
   };
 

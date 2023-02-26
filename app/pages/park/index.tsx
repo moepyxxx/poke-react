@@ -21,6 +21,7 @@ export default function ParkIndex() {
     });
   }, []);
 
+  // TODO: 水のなか・どうくつとかも追加したい
   const actions: Action[] = [
     { label: "くさむらを探す", fn: () => router.push("/park/kusamura") },
   ];
