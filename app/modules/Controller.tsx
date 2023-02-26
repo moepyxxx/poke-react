@@ -11,7 +11,7 @@ export const Controller: React.FC<Props> = ({ actions }) => {
     <>
       {actions.map((action, index) => {
         if (action.hidden) {
-          return <></>;
+          return <div key={index}></div>;
         }
         return (
           <div key={index}>

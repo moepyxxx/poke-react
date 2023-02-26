@@ -9,8 +9,6 @@ export const usePlayTime = (): [number, () => void] => {
 
   let timerId: NodeJS.Timer;
 
-  console.log("playtime");
-
   useEffect(() => {
     const timer = () => {
       setElapsedTime((elapsedTime) => elapsedTime + 1);

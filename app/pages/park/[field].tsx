@@ -3,6 +3,9 @@ import { PokeAPIPokemon } from "@/config/types";
 import { randomResult } from "@/config/utils";
 import { useFetchWildPokemon } from "@/hooks/useFetchWildPokemon";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
+import { Action, Controller } from "@/modules/Controller";
+import { Quote } from "@/modules/Quote";
+import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -116,60 +119,101 @@ export default function FieldIndex() {
   };
 
   const ToSearch = () => {
-    if (!park) return <></>;
+    if (!park || park.remainBallCount !== 0) return <></>;
+    return <p>ああ、手持ちのボールがなくなってしまいました！</p>;
 
-    if (park.remainBallCount === 0) {
-      return (
-        <>
-          <p>ああ、手持ちのボールがなくなってしまいました！</p>
-          <button onClick={goToResult}>サファリパークを出る</button>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <button onClick={search}>あたりを探す</button>
-          <button onClick={() => router.push("/park")}>他の場所を探す</button>
-        </>
-      );
-    }
+    // if (park.remainBallCount === 0) {
+    //   return (
+    //     <>
+    //       <p>ああ、手持ちのボールがなくなってしまいました！</p>
+    //       <button onClick={goToResult}>サファリパークを出る</button>
+    //     </>
+    //   );
+    // } else {
+    //   return (
+    //     <>
+    //       <button onClick={search}>あたりを探す</button>
+    //       <button onClick={() => router.push("/park")}>他の場所を探す</button>
+    //     </>
+    //   );
+    // }
   };
 
   const AppearPokemon = () => {
-    if (wildPokemon) {
-      return (
-        <>
-          <p>{wildPokemon.name}</p>
-          <Image
-            width="100"
-            height="100"
-            src={wildPokemon.sprites.front_default}
-            alt={wildPokemon.name}
-          />
-          {isCapturePokemon ? (
+    if (!wildPokemon) return <></>;
+    return (
+      <>
+        <p>{wildPokemon.name}</p>
+        <Image
+          width="100"
+          height="100"
+          src={wildPokemon.sprites.front_default}
+          alt={wildPokemon.name}
+        />
+        {/* {isCapturePokemon ? (
             <button onClick={searchOther}>次のポケモンを探す</button>
           ) : (
             <>
               <button onClick={runAway}>逃げる</button>
               <button onClick={throwBall}>ボールを投げる</button>
             </>
-          )}
-        </>
-      );
-    } else {
-      return <p>チョットマッテネ</p>;
-    }
+          )} */}
+      </>
+    );
+    // } else {
+    //   return <p>チョットマッテネ</p>;
+    // }
   };
+
+  const actions: Action[] = [
+    {
+      label: "サファリパークを出る",
+      fn: goToResult,
+      hidden: isEncounter || park.remainBallCount !== 0,
+    },
+    {
+      label: "あたりを探す",
+      fn: search,
+      hidden: isEncounter || park.remainBallCount === 0,
+    },
+    {
+      label: "他の場所を探す",
+      fn: () => router.push("/park"),
+      hidden: isEncounter || park.remainBallCount === 0,
+    },
+    {
+      label: "次のポケモンを探す",
+      fn: searchOther,
+      hidden: !isEncounter || !wildPokemon || !isCapturePokemon,
+    },
+    {
+      label: "逃げる",
+      fn: runAway,
+      hidden: !isEncounter || !wildPokemon || isCapturePokemon === true,
+    },
+    {
+      label: "ボールを投げる",
+      fn: throwBall,
+      hidden: !isEncounter || !wildPokemon || isCapturePokemon === true,
+    },
+  ];
 
   return (
     <div>
       <SceneTitle title={`サファリパーク内 - ${parseFieldName(field)}`} />
-      <p>
-        残りのボール：
-        <span suppressHydrationWarning>{park ? park.remainBallCount : 0}</span>
-      </p>
-      <p>{resultText}</p>
-      {isEncounter ? <AppearPokemon /> : <ToSearch />}
+      <Quote>
+        <p>{resultText}</p>
+      </Quote>
+      <Scene>
+        <p>
+          残りのボール：
+          <span suppressHydrationWarning>
+            {park ? park.remainBallCount : 0}
+          </span>
+        </p>
+        {isEncounter ? <AppearPokemon /> : <ToSearch />}
+      </Scene>
+      <Controller actions={actions} />
     </div>
   );
 }

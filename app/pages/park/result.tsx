@@ -1,6 +1,9 @@
 import { parkLocalStorageName } from "@/config";
 import { useAppDispatch } from "@/hooks";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
+import { Action, Controller } from "@/modules/Controller";
+import { Quote } from "@/modules/Quote";
+import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { addPokemons } from "@/stores/localDataSlices";
 import { useRouter } from "next/router";
@@ -18,30 +21,36 @@ export default function ParkResult() {
   }, []);
 
   const returnToTop = () => {
-    dispatch(setPokemons(park.capturePokemons));
+    dispatch(addPokemons(park.capturePokemons));
     setPark(null);
     router.push("/");
   };
 
   if (!park) return <></>;
 
+  const actions: Action[] = [{ label: "パーク前に戻る", fn: returnToTop }];
+
   return (
     <>
       <SceneTitle title="たんけん結果" />
-      <p>
-        おめでとう。あなたはサファリパークでポケモンを
-        <span suppressHydrationWarning>{park.capturePokemons.length}</span>
-        ひきゲットしました！
-      </p>
-      {park.capturePokemons.map((pokemon, index) => {
-        return (
-          <p key={`${index}-${pokemon.id}`} suppressHydrationWarning>
-            {pokemon.name}
-          </p>
-        );
-      })}
+      <Quote>
+        <p>
+          おめでとう。あなたはサファリパークでポケモンを
+          <span suppressHydrationWarning>{park.capturePokemons.length}</span>
+          ひきゲットしました！
+        </p>
+      </Quote>
+      <Scene>
+        {park.capturePokemons.map((pokemon, index) => {
+          return (
+            <p key={`${index}-${pokemon.id}`} suppressHydrationWarning>
+              {pokemon.name}
+            </p>
+          );
+        })}
+      </Scene>
       {/** TODO: ニックネーム or 逃す */}
-      <button onClick={returnToTop}>パーク前に戻る</button>
+      <Controller actions={actions} />
     </>
   );
 }

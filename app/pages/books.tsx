@@ -6,6 +6,8 @@ import { PokeAPIPokemon } from "@/config/types";
 import { useAppSelector } from "@/hooks";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
 import { Action, Controller } from "@/modules/Controller";
+import { Quote } from "@/modules/Quote";
+import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -46,24 +48,29 @@ export default function Status() {
     <div>
       <SceneTitle title="ポケモンずかん" />
       <Controller actions={actions} />
-      {createdBookPokemons.map((pokemon) => {
-        return (
-          <div key={pokemon.id}>
-            <p>ID: {pokemon.id}</p>
-            <p>なまえ：{pokemon.name}</p>
-            {pokemon.sprites.front_default === "" ? (
-              <></>
-            ) : (
-              <Image
-                width="100"
-                height="100"
-                src={pokemon.sprites.front_default}
-                alt={pokemon.name}
-              />
-            )}
-          </div>
-        );
-      })}
+      <Quote>
+        <p>あなたのポケモンずかんです。</p>
+      </Quote>
+      <Scene>
+        {createdBookPokemons.map((pokemon) => {
+          return (
+            <div key={pokemon.id}>
+              <p>ID: {pokemon.id}</p>
+              <p>なまえ：{pokemon.name}</p>
+              {pokemon.sprites.front_default === "" ? (
+                <></>
+              ) : (
+                <Image
+                  width="100"
+                  height="100"
+                  src={pokemon.sprites.front_default}
+                  alt={pokemon.name}
+                />
+              )}
+            </div>
+          );
+        })}
+      </Scene>
     </div>
   );
 }

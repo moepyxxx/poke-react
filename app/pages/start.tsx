@@ -1,4 +1,6 @@
 import { Action, Controller } from "@/modules/Controller";
+import { Quote } from "@/modules/Quote";
+import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { SetPartner } from "@/modules/start/SetPartner";
 import { SetPlayerName } from "@/modules/start/SetPlayerName";
@@ -41,7 +43,7 @@ export default function Start() {
     },
   ];
 
-  const Scene = () => {
+  const SceneComponent = () => {
     switch (scene) {
       case "setPlayerName":
         return <SetPlayerName setScene={setScene} />;
@@ -74,7 +76,12 @@ export default function Start() {
   return (
     <>
       <SceneTitle title="はじめに" />
-      <Scene />
+      <Quote>
+        <p>こんにちは、サファリパークの冒険をはじめましょう。</p>
+      </Quote>
+      <Scene>
+        <SceneComponent />
+      </Scene>
       <Controller actions={actions} />
     </>
   );

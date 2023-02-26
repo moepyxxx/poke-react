@@ -6,6 +6,8 @@
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { usePlayTime } from "@/hooks/usePlayTime";
 import { Action, Controller } from "@/modules/Controller";
+import { Quote } from "@/modules/Quote";
+import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { setPokemons } from "@/stores/saveSlices";
 import { useRouter } from "next/router";
@@ -36,7 +38,12 @@ export default function Home() {
   return (
     <>
       <SceneTitle title="サファリパーク前" />
-      <Controller actions={actions} />
+      <Quote>
+        <p>メニューを選んでください。</p>
+      </Quote>
+      <Scene>
+        <Controller actions={actions} />
+      </Scene>
     </>
   );
 }
