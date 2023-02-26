@@ -7,6 +7,7 @@ import { Action, Controller } from "@/modules/Controller";
 import { Quote } from "@/modules/Quote";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
+import { Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -122,23 +123,9 @@ export default function FieldIndex() {
 
   const ToSearch = () => {
     if (!park || park.remainBallCount !== 0) return <></>;
-    return <p>ああ、手持ちのボールがなくなってしまいました！</p>;
-
-    // if (park.remainBallCount === 0) {
-    //   return (
-    //     <>
-    //       <p>ああ、手持ちのボールがなくなってしまいました！</p>
-    //       <button onClick={goToResult}>サファリパークを出る</button>
-    //     </>
-    //   );
-    // } else {
-    //   return (
-    //     <>
-    //       <button onClick={search}>あたりを探す</button>
-    //       <button onClick={() => router.push("/park")}>他の場所を探す</button>
-    //     </>
-    //   );
-    // }
+    return (
+      <Typography>ああ、手持ちのボールがなくなってしまいました！</Typography>
+    );
   };
 
   const AppearPokemon = () => {
@@ -152,19 +139,8 @@ export default function FieldIndex() {
           src={wildPokemon.sprites.front_default}
           alt={wildPokemon.name}
         />
-        {/* {isCapturePokemon ? (
-            <button onClick={searchOther}>次のポケモンを探す</button>
-          ) : (
-            <>
-              <button onClick={runAway}>逃げる</button>
-              <button onClick={throwBall}>ボールを投げる</button>
-            </>
-          )} */}
       </>
     );
-    // } else {
-    //   return <p>チョットマッテネ</p>;
-    // }
   };
 
   const actions: Action[] = [
@@ -204,7 +180,7 @@ export default function FieldIndex() {
     <div>
       <SceneTitle title={`サファリパーク内 - ${parseFieldName(field)}`} />
       <Quote>
-        <p>{resultText}</p>
+        <Typography>{resultText}</Typography>
       </Quote>
       <Scene>
         <p>
