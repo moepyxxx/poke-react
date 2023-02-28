@@ -1,13 +1,15 @@
 import { SingleBoxBorder } from "@/pages/_app";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
 type Props = {
-  children: ReactNode;
+  quote: string;
+  next?: () => void;
 };
-export const Quote: React.FC<Props> = ({ children }) => {
+export const Quote: React.FC<Props> = ({ quote, next }) => {
   return (
     <Box
+      onClick={next}
       sx={{
         position: "absolute",
         width: "calc(100% - 48px)",
@@ -18,7 +20,7 @@ export const Quote: React.FC<Props> = ({ children }) => {
         ...SingleBoxBorder,
       }}
     >
-      {children}
+      <Typography>{quote}</Typography>
     </Box>
   );
 };

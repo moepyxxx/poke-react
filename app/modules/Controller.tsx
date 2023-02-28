@@ -8,8 +8,14 @@ export type Action = {
 };
 type Props = {
   actions: Action[];
+  next: () => void;
 };
-export const Controller: React.FC<Props> = ({ actions }) => {
+export const Controller: React.FC<Props> = ({ actions, next }) => {
+  const clickAction = (fn: () => void) => {
+    next();
+    fn();
+  };
+
   return (
     <Box
       sx={{
@@ -29,7 +35,7 @@ export const Controller: React.FC<Props> = ({ actions }) => {
         }
         return (
           <Box key={index}>
-            <Button variant="text" onClick={action.fn}>
+            <Button variant="text" onClick={() => clickAction(action.fn)}>
               {action.label}
             </Button>
           </Box>

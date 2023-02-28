@@ -1,93 +1,79 @@
-import { Action, Controller } from "@/modules/Controller";
-import { Quote } from "@/modules/Quote";
+import { Panel, PanelAction } from "@/modules/Panel";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { SetPartner } from "@/modules/start/SetPartner";
 import { SetPlayerName } from "@/modules/start/SetPlayerName";
 import { gameStart } from "@/stores/saveSlices";
-import { Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export type Scene =
+  | "opening"
   | "setPlayerName"
   | "greeting"
   | "setFirstPokemon"
   | "closingTalk";
 
+export type PanelActionLabel = "greeting" | "closingTalk";
+
 export default function Start() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [scene, setScene] = useState<Scene>("setPlayerName");
+  const [scene, setScene] = useState<Scene>("opening");
+  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
   const state = useAppSelector((state) => state);
-
-  useEffect(() => {
-    if (scene !== "closingTalk") return;
-    dispatch(gameStart(""));
-  }, [scene]);
 
   const start = () => {
     router.push("/");
   };
 
-  const actions: Action[] = [
+  const panelActions: PanelAction<PanelActionLabel>[] = [
     {
-      label: "次へ",
-      fn: () => setScene("setFirstPokemon"),
-      hidden: scene !== "greeting",
+      text: "こんにちは、ポケモンの世界へようこそ！サファリパークの冒険をはじめましょう。",
+      nextFn: () => setScene("setPlayerName"),
+    },
+    { text: "はじめにあなたの名前を教えてください", isNextDisable: true },
+    {
+      text: `あらためまして、こんにちは、${state.save.name}さん！`,
+      label: "greeting",
     },
     {
-      label: "ゲームスタート",
-      fn: start,
-      hidden: scene !== "closingTalk",
+      text: "サファリパークだけできるポケモンへようこそ。たくさん遊んで月曜日にそなえましょう！",
+      nextFn: () => setScene("setFirstPokemon"),
+    },
+    {
+      text: "さあ、まずは最初のパートナーをきめましょう！",
+      isNextDisable: false,
+    },
+    {
+      text: `${state.save.name}さんとパートナーの${
+        state.local.pokemons[0]?.name ?? ""
+      }の、最初のデータがすべてきちんと作成されました！`,
+      label: "closingTalk",
+    },
+    {
+      text: "こまめにセーブをするのは、忘れないでくださいね。",
+      nextFn: start,
     },
   ];
+
+  useEffect(() => {
+    if (scene === "greeting" || scene === "closingTalk") {
+      const index = panelActions.findIndex((action) => action.label === scene);
+      setCurrentPanelIndex(index);
+    }
+    if (scene === "closingTalk") {
+      dispatch(gameStart(""));
+    }
+  }, [scene]);
 
   const SceneComponent = () => {
     switch (scene) {
       case "setPlayerName":
-        return (
-          <>
-            <Quote>
-              <Typography>はじめにあなたの名前を教えてください</Typography>
-            </Quote>
-            <SetPlayerName setScene={setScene} />
-          </>
-        );
-      case "greeting":
-        return (
-          <>
-            <Typography>こんにちは、{state.save.name}さん！</Typography>
-            <Typography>
-              サファリパークだけできるポケモンへようこそ。たくさん遊んで月曜日にそなえましょう！
-            </Typography>
-          </>
-        );
+        return <SetPlayerName setScene={setScene} />;
       case "setFirstPokemon":
-        return (
-          <>
-            <Quote>
-              <Typography>
-                さあ、まずは最初のパートナーをきめましょう！
-              </Typography>
-            </Quote>
-            <SetPartner setScene={setScene} />
-          </>
-        );
-      case "closingTalk":
-        return (
-          <Quote>
-            <Typography>
-              {state.save.name}
-              さんとパートナーの{state.local.pokemons[0].name}
-              の、最初のデータがすべてきちんと作成されました！
-            </Typography>
-            <Typography>
-              こまめにセーブをするのは、忘れないでくださいね。
-            </Typography>
-          </Quote>
-        );
+        return <SetPartner setScene={setScene} />;
       default:
         return <></>;
     }
@@ -96,15 +82,14 @@ export default function Start() {
   return (
     <>
       <SceneTitle title="はじめに" />
-      <Quote>
-        <Typography>
-          こんにちは、サファリパークの冒険をはじめましょう。
-        </Typography>
-      </Quote>
       <Scene>
         <SceneComponent />
       </Scene>
-      <Controller actions={actions} />
+      <Panel
+        actions={panelActions}
+        currentIndex={currentPanelIndex}
+        setCurrentIndex={setCurrentPanelIndex}
+      />
     </>
   );
 }
