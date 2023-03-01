@@ -26,20 +26,26 @@ export const Config: React.FC = () => {
 
     dispatch(setPokemons(state.save.pokemons));
   }, []);
-  return (
-    <Box
-      sx={{
-        position: "absolute",
-        top: 24,
-        left: 24,
-        ...SingleBoxBorder,
-        p: 1.5,
-      }}
-    >
-      <Typography suppressHydrationWarning>プレイじかん：{playtime}</Typography>
-      <Typography>
-        なまえ：<span suppressHydrationWarning>{save.name}</span>
-      </Typography>
-    </Box>
-  );
+
+  if (router.pathname === "/") {
+    return (
+      <Box
+        sx={{
+          position: "absolute",
+          top: 24,
+          left: 24,
+          ...SingleBoxBorder,
+          p: 1.5,
+        }}
+      >
+        <Typography suppressHydrationWarning>
+          プレイじかん：{playtime}
+        </Typography>
+        <Typography>
+          なまえ：<span suppressHydrationWarning>{save.name}</span>
+        </Typography>
+      </Box>
+    );
+  }
+  return <></>;
 };

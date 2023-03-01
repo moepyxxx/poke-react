@@ -1,4 +1,3 @@
-import { positionCenter } from "@/pages/_app";
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
 
@@ -10,8 +9,11 @@ export const Scene: React.FC<Props> = ({ children }) => {
     <Box
       sx={{
         overflow: "scroll",
-        ...positionCenter,
-        height: 360,
+        position: "absolute",
+        top: 24,
+        left: "50%",
+        transform: "translateX(-50%)",
+        height: 480,
         width: "calc(100% - 48px)",
       }}
     >
