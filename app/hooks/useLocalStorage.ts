@@ -1,10 +1,12 @@
 import { Pokemon } from "@/stores/saveSlices";
 import { useState } from "react";
+import { FieldPath } from "@/pages/park/[field]";
 
 export type Park = {
   isStart: boolean;
   remainBallCount: number;
   capturePokemons: Pokemon[];
+  field: FieldPath | null;
 };
 
 // see: https://usehooks.com/useLocalStorage/

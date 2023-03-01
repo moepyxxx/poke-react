@@ -16,6 +16,7 @@ export default function ParkIndex() {
 
     setPark({
       isStart: true,
+      field: null,
       remainBallCount: 4,
       capturePokemons: [],
     });
