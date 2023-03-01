@@ -8,7 +8,6 @@ import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { addPokemons } from "@/stores/localDataSlices";
 import { Grid, Typography } from "@mui/material";
-import { Box } from "@mui/system";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -19,31 +18,35 @@ export default function ParkResult() {
   const router = useRouter();
   const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
   const pokemons = useFetchPokemons(
-    park.capturePokemons.map((pokemon) => pokemon.id)
+    park ? park.capturePokemons.map((pokemon) => pokemon.id) : []
   );
 
   useEffect(() => {
+    if (!park) return;
+
     if (park.isStart && park.remainBallCount > 0) {
       router.push("/park");
     }
   }, []);
 
   const returnToTop = () => {
+    if (!park) return;
+
     dispatch(addPokemons(park.capturePokemons));
     setPark(null);
     router.push("/");
   };
 
-  if (!park) return <></>;
-
   const actions: Action[] = [{ label: "パーク前に戻る", fn: returnToTop }];
   const panelActions: PanelAction<"">[] = [
     {
-      text: `おめでとう。あなたはサファリパークでポケモンを${park.capturePokemons.length}ひきゲットしました！`,
+      text: `おめでとう。あなたはサファリパークでポケモンを${park?.capturePokemons.length}ひきゲットしました！`,
       controllerActions: actions,
       isNextDisable: true,
     },
   ];
+
+  if (!park) return <></>;
 
   return (
     <>
@@ -52,12 +55,13 @@ export default function ParkResult() {
         <Grid container spacing={2}>
           {pokemons.map((pokemon, index) => {
             return (
-              <Grid item sx={{ textAlign: "center" }} xs={2}>
-                <Typography
-                  align="center"
-                  key={`${index}-${pokemon.id}`}
-                  suppressHydrationWarning
-                >
+              <Grid
+                item
+                sx={{ textAlign: "center" }}
+                xs={2}
+                key={`${index}-${pokemon.id}`}
+              >
+                <Typography align="center" suppressHydrationWarning>
                   {pokemon.name}
                 </Typography>
                 <Image

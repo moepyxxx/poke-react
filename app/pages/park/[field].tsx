@@ -37,6 +37,7 @@ export default function FieldIndex() {
   const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
 
   const goToResult = () => {
+    if (!park) return;
     setPark({
       ...park,
       isStart: false,
@@ -74,7 +75,6 @@ export default function FieldIndex() {
   };
 
   const search = () => {
-    console.log("search!");
     setIsEncounter(randomResult(5));
   };
 
@@ -87,6 +87,7 @@ export default function FieldIndex() {
   };
 
   const throwBall = () => {
+    if (!park) return;
     if (park.remainBallCount === 0) {
       const index = panelActions.findIndex(
         (action) => action.label === "BallIsGone"
@@ -105,6 +106,7 @@ export default function FieldIndex() {
   };
 
   const capture = () => {
+    if (!park) return;
     if (!wildPokemon) return;
     const index = panelActions.findIndex(
       (action) => action.label === "capturePokemon"
@@ -171,7 +173,7 @@ export default function FieldIndex() {
       hidden: !isEncounter || !wildPokemon || isCapturePokemon === true,
     },
     {
-      label: `ボール（残り${park.remainBallCount}）`,
+      label: `ボール（残り${park ? park.remainBallCount : ""}）`,
       fn: throwBall,
       hidden: !isEncounter || !wildPokemon || isCapturePokemon === true,
     },
@@ -181,17 +183,17 @@ export default function FieldIndex() {
     {
       label: "パークを出る",
       fn: goToResult,
-      hidden: isEncounter || park.remainBallCount !== 0,
+      hidden: isEncounter || park?.remainBallCount !== 0,
     },
     {
       label: "あたりを探す",
       fn: search,
-      hidden: isEncounter || park.remainBallCount === 0,
+      hidden: isEncounter || park?.remainBallCount === 0,
     },
     {
       label: "別のフィールドへ",
       fn: () => router.push("/park"),
-      hidden: isEncounter || park.remainBallCount === 0,
+      hidden: isEncounter || park?.remainBallCount === 0,
     },
     {
       label: "フィールドへ",
@@ -212,7 +214,7 @@ export default function FieldIndex() {
     {
       text: `${parseFieldName(
         field
-      )}でポケモンを探しましょう！（ボールの残り：${park.remainBallCount}）`,
+      )}でポケモンを探しましょう！（ボールの残り：${park?.remainBallCount}）`,
       controllerActions: fieldActions,
       isNextDisable: true,
     },
