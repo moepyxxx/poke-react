@@ -55,7 +55,6 @@ export default function FieldIndex() {
       return;
     }
     if (!isEncounter) {
-      console.log("とおってる？");
       const index = panelActions.findIndex(
         (action) => action.label === "notAppearPokemon"
       );
@@ -136,6 +135,7 @@ export default function FieldIndex() {
     setCurrentPanelIndex(0);
     setIsCapturePokemon(null);
     setIsEncounter(null);
+    setWildPokemon(null);
   };
 
   const AppearPokemon = () => {
@@ -235,7 +235,7 @@ export default function FieldIndex() {
     {
       label: "runAway",
       text: "ここはいったんにげよう！",
-      nextFn: () => setCurrentPanelIndex(0),
+      nextFn: returnField,
     },
     {
       label: "canNotCapturePokemon",
@@ -248,7 +248,7 @@ export default function FieldIndex() {
     },
     {
       text: `${wildPokemon?.name}のデータがあたらしく登録されました。`,
-      nextFn: returnField, // リセット
+      nextFn: returnField,
     },
     {
       label: "BallIsGone",
