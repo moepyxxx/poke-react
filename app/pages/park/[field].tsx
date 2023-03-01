@@ -3,8 +3,8 @@ import { PokeAPIPokemon } from "@/config/types";
 import { randomResult } from "@/config/utils";
 import { useFetchWildPokemon } from "@/hooks/useFetchWildPokemon";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
-import { Action, Controller } from "@/modules/Controller";
-import { Quote } from "@/modules/Quote";
+import { Action } from "@/modules/Controller";
+import { Panel, PanelAction } from "@/modules/Panel";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { Box, Typography } from "@mui/material";
@@ -32,10 +32,9 @@ export default function FieldIndex() {
   const [isCapturePokemon, setIsCapturePokemon] = useState<boolean | null>(
     null
   );
-  const [searchCount, setSearchCount] = useState<number>(0);
-  const [resultText, setResultText] = useState<string>("");
   const [wildPokemon, setWildPokemon] = useState<PokeAPIPokemon | null>(null);
   const fetchWildPokemon = useFetchWildPokemon();
+  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
 
   const goToResult = () => {
     setPark({
@@ -46,29 +45,24 @@ export default function FieldIndex() {
   };
 
   useEffect(() => {
-    if (isEncounter == null) {
-      setResultText(
-        `${parseFieldName(field)}でポケモンを探しましょう！（ボールの残り：${
-          park.remainBallCount
-        }）`
-      );
-      return;
-    }
+    if (isEncounter === null) return;
     if (isEncounter) {
-      setResultText(`あ、やせいの${wildPokemon?.name}があらわれた！`);
+      const index = panelActions.findIndex(
+        (action) => action.label === "appearPokemon"
+      );
+      setCurrentPanelIndex(index);
       appearPokemon();
       return;
     }
     if (!isEncounter) {
-      setResultText("ここには何もいないようだ");
+      console.log("とおってる？");
+      const index = panelActions.findIndex(
+        (action) => action.label === "notAppearPokemon"
+      );
+      setCurrentPanelIndex(index);
       return;
     }
-  }, [searchCount]);
-
-  // useEffect(() => {
-  //   if (park.remainBallCount !== 0) return;
-  //   setResultText("ああ、手持ちのボールがなくなってしまいました！");
-  // }, [park.capturePokemons]);
+  }, [isEncounter]);
 
   useEffect(() => {
     if (isCapturePokemon == null) return;
@@ -81,20 +75,27 @@ export default function FieldIndex() {
   };
 
   const search = () => {
-    setSearchCount(() => searchCount + 1);
+    console.log("search!");
     setIsEncounter(randomResult(5));
   };
 
   const runAway = () => {
-    setResultText("");
+    const index = panelActions.findIndex(
+      (action) => action.label === "runAway"
+    );
+    setCurrentPanelIndex(index);
     setIsEncounter(null);
   };
 
   const throwBall = () => {
     if (park.remainBallCount === 0) {
-      setResultText("手持ちのボールがもうありません！");
+      const index = panelActions.findIndex(
+        (action) => action.label === "BallIsGone"
+      );
+      setCurrentPanelIndex(index);
       return;
     }
+
     setPark({
       ...park,
       remainBallCount: park.remainBallCount - 1,
@@ -106,7 +107,10 @@ export default function FieldIndex() {
 
   const capture = () => {
     if (!wildPokemon) return;
-    setResultText(`やった！${wildPokemon.name}を捕まえた！`);
+    const index = panelActions.findIndex(
+      (action) => action.label === "capturePokemon"
+    );
+    setCurrentPanelIndex(index);
     const newPokemons = [
       ...park.capturePokemons,
       {
@@ -122,11 +126,14 @@ export default function FieldIndex() {
   };
 
   const failure = () => {
-    setResultText("おしい、もうちょっとだったのに！");
+    const index = panelActions.findIndex(
+      (action) => action.label === "canNotCapturePokemon"
+    );
+    setCurrentPanelIndex(index);
   };
 
-  const searchOther = () => {
-    setResultText("");
+  const returnField = () => {
+    setCurrentPanelIndex(0);
     setIsCapturePokemon(null);
     setIsEncounter(null);
   };
@@ -157,7 +164,20 @@ export default function FieldIndex() {
     );
   };
 
-  const actions: Action[] = [
+  const captureActions: Action[] = [
+    {
+      label: "逃げる",
+      fn: runAway,
+      hidden: !isEncounter || !wildPokemon || isCapturePokemon === true,
+    },
+    {
+      label: `ボール（残り${park.remainBallCount}）`,
+      fn: throwBall,
+      hidden: !isEncounter || !wildPokemon || isCapturePokemon === true,
+    },
+  ];
+
+  const fieldActions: Action[] = [
     {
       label: "パークを出る",
       fn: goToResult,
@@ -175,29 +195,77 @@ export default function FieldIndex() {
     },
     {
       label: "フィールドへ",
-      fn: searchOther,
+      fn: returnField,
       hidden: !isEncounter || !wildPokemon || !isCapturePokemon,
     },
+  ];
+
+  const panelActions: PanelAction<
+    | "notAppearPokemon"
+    | "appearPokemon"
+    | "runAway"
+    | "canNotCapturePokemon"
+    | "capturePokemon"
+    | "selectAction"
+    | "BallIsGone"
+  >[] = [
     {
-      label: "逃げる",
-      fn: runAway,
-      hidden: !isEncounter || !wildPokemon || isCapturePokemon === true,
+      text: `${parseFieldName(
+        field
+      )}でポケモンを探しましょう！（ボールの残り：${park.remainBallCount}）`,
+      controllerActions: fieldActions,
+      isNextDisable: true,
     },
     {
-      label: `ボール（残り${park.remainBallCount}）`,
-      fn: throwBall,
-      hidden: !isEncounter || !wildPokemon || isCapturePokemon === true,
+      label: "notAppearPokemon",
+      text: "ここには何もいないようだ",
+      controllerActions: fieldActions,
+      isNextDisable: true,
+    },
+    {
+      label: "appearPokemon",
+      text: `あ、やせいの${wildPokemon?.name}があらわれた！`,
+    },
+    {
+      label: "selectAction",
+      text: "何をする？",
+      controllerActions: captureActions,
+      isNextDisable: true,
+    },
+    {
+      label: "runAway",
+      text: "ここはいったんにげよう！",
+      nextFn: () => setCurrentPanelIndex(0),
+    },
+    {
+      label: "canNotCapturePokemon",
+      text: "おしい、もうちょっとだったのに！",
+      nextFn: () => setCurrentPanelIndex(3),
+    },
+    {
+      label: "capturePokemon",
+      text: `やった！${wildPokemon?.name}を捕まえた！`,
+    },
+    {
+      text: `${wildPokemon?.name}のデータがあたらしく登録されました。`,
+      nextFn: returnField, // リセット
+    },
+    {
+      label: "BallIsGone",
+      text: "ああ、手持ちのボールがなくなってしまいました！",
+      nextFn: () => setCurrentPanelIndex(3),
     },
   ];
 
   return (
     <div>
       <SceneTitle title={`サファリパーク内 - ${parseFieldName(field)}`} />
-      <Quote>
-        <Typography>{resultText}</Typography>
-      </Quote>
+      <Panel
+        actions={panelActions}
+        currentIndex={currentPanelIndex}
+        setCurrentIndex={setCurrentPanelIndex}
+      />
       <Scene>{isEncounter ? <AppearPokemon /> : <></>}</Scene>
-      <Controller actions={actions} />
     </div>
   );
 }

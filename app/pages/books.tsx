@@ -5,13 +5,14 @@ import {
 import { PokeAPIPokemon } from "@/config/types";
 import { useAppSelector } from "@/hooks";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
-import { Action, Controller } from "@/modules/Controller";
-import { Quote } from "@/modules/Quote";
+import { Action } from "@/modules/Controller";
+import { Panel, PanelAction } from "@/modules/Panel";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { Box, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function Status() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function Status() {
   const capturePokemons = useFetchPokemons(
     local.pokemons.map((pokemon) => pokemon.id)
   );
+  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
 
   const createdBookPokemons: PokeAPIPokemon[] = [];
   for (
@@ -45,13 +47,17 @@ export default function Status() {
     { label: "パーク前に戻る", fn: () => router.push("/") },
   ];
 
+  const panelActions: PanelAction<"">[] = [
+    {
+      text: "あなたのポケモンずかんです。",
+      controllerActions: actions,
+      isNextDisable: true,
+    },
+  ];
+
   return (
     <>
       <SceneTitle title="ポケモンずかん" />
-      <Controller actions={actions} />
-      <Quote>
-        <Typography>あなたのポケモンずかんです。</Typography>
-      </Quote>
       <Scene>
         {createdBookPokemons.map((pokemon) => {
           return (
@@ -74,6 +80,11 @@ export default function Status() {
           );
         })}
       </Scene>
+      <Panel
+        actions={panelActions}
+        currentIndex={currentPanelIndex}
+        setCurrentIndex={setCurrentPanelIndex}
+      />
     </>
   );
 }

@@ -15,27 +15,28 @@ type Props<T> = {
   setCurrentIndex: Dispatch<SetStateAction<number>>;
 };
 export const Panel = <T,>(props: React.PropsWithChildren<Props<T>>) => {
-  const [current, setCurrent] = useState<PanelAction<T>>(
-    props.actions[props.currentIndex]
-  );
+  const [current, setCurrent] = useState<PanelAction<T>>(props.actions[0]);
   const [isLast, setIsLast] = useState<boolean>(false);
 
   useEffect(() => {
     setCurrent(props.actions[props.currentIndex]);
-
     if (props.currentIndex !== props.actions.length - 1) return;
     setIsLast(true);
-  }, [props.currentIndex]);
+  }, [props.actions]);
 
   const changeNextPanelAction = () => {
     if (current.isNextDisable === true) {
       return;
     }
-    current.nextFn ? current.nextFn() : "";
-
+    if (current.nextFn) {
+      current.nextFn();
+      return;
+    }
     if (isLast) return;
     props.setCurrentIndex((index) => index + 1);
   };
+
+  if (!current) return <></>;
 
   return (
     <>

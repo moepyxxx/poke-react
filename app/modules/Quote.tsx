@@ -1,6 +1,6 @@
 import { SingleBoxBorder } from "@/pages/_app";
 import { Box, Typography } from "@mui/material";
-import { ReactNode } from "react";
+import ChangeHistoryIcon from "@mui/icons-material/ChangeHistory";
 
 type Props = {
   quote: string;
@@ -21,6 +21,19 @@ export const Quote: React.FC<Props> = ({ quote, next }) => {
       }}
     >
       <Typography>{quote}</Typography>
+      {next ? (
+        <ChangeHistoryIcon
+          sx={{
+            fontSize: 12,
+            transform: "rotate(180)",
+            position: "absolute",
+            bottom: 12,
+            right: 12,
+          }}
+        />
+      ) : (
+        <></>
+      )}
     </Box>
   );
 };

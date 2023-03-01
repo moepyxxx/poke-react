@@ -1,19 +1,20 @@
 import { parkLocalStorageName } from "@/config";
 import { useAppDispatch } from "@/hooks";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
-import { Action, Controller } from "@/modules/Controller";
-import { Quote } from "@/modules/Quote";
+import { Action } from "@/modules/Controller";
+import { Panel, PanelAction } from "@/modules/Panel";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { addPokemons } from "@/stores/localDataSlices";
 import { Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function ParkResult() {
   const [park, setPark] = useLocalStorage<Park>(parkLocalStorageName, null);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
 
   useEffect(() => {
     if (park.isStart && park.remainBallCount > 0) {
@@ -30,17 +31,17 @@ export default function ParkResult() {
   if (!park) return <></>;
 
   const actions: Action[] = [{ label: "パーク前に戻る", fn: returnToTop }];
+  const panelActions: PanelAction<"">[] = [
+    {
+      text: `おめでとう。あなたはサファリパークでポケモンを${park.capturePokemons.length}ひきゲットしました！`,
+      controllerActions: actions,
+      isNextDisable: true,
+    },
+  ];
 
   return (
     <>
       <SceneTitle title="たんけん結果" />
-      <Quote>
-        <Typography>
-          おめでとう。あなたはサファリパークでポケモンを
-          <span suppressHydrationWarning>{park.capturePokemons.length}</span>
-          ひきゲットしました！
-        </Typography>
-      </Quote>
       <Scene>
         {park.capturePokemons.map((pokemon, index) => {
           return (
@@ -55,7 +56,11 @@ export default function ParkResult() {
         })}
       </Scene>
       {/** TODO: ニックネーム or 逃す */}
-      <Controller actions={actions} />
+      <Panel
+        actions={panelActions}
+        currentIndex={currentPanelIndex}
+        setCurrentIndex={setCurrentPanelIndex}
+      />
     </>
   );
 }

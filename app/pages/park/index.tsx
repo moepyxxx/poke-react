@@ -1,16 +1,15 @@
 import { parkLocalStorageName } from "@/config";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
-import { Action, Controller } from "@/modules/Controller";
-import { Quote } from "@/modules/Quote";
-import { Scene } from "@/modules/Scene";
+import { Panel, PanelAction } from "@/modules/Panel";
 import { SceneTitle } from "@/modules/SceneTitle";
-import { Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function ParkIndex() {
   const router = useRouter();
   const [park, setPark] = useLocalStorage<Park>(parkLocalStorageName, null);
+  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
+  const [panelActions, setPanelActions] = useState<PanelAction<"">[]>([]);
 
   useEffect(() => {
     if (park != null) return;
@@ -22,22 +21,26 @@ export default function ParkIndex() {
     });
   }, []);
 
-  // TODO: 水のなか・どうくつとかも追加したい
-  const actions: Action[] = [
-    { label: "くさむらを探す", fn: () => router.push("/park/kusamura") },
-  ];
+  useEffect(() => {
+    if (!park) return;
+    setPanelActions([
+      {
+        text: `残りのボールが0になるまでサファリパーク内を探索しましょう（ボールの残り：${park.remainBallCount}）。`,
+        controllerActions: [
+          { label: "くさむらを探す", fn: () => router.push("/park/kusamura") },
+        ],
+      },
+    ]);
+  }, [park]);
 
   return (
     <>
       <SceneTitle title="サファリパーク内" />
-      <Quote>
-        <Typography>
-          残りのボールが0になるまでサファリパーク内を探索しましょう（ボールの残り：
-          <span suppressHydrationWarning>{park?.remainBallCount}</span>）。
-        </Typography>
-      </Quote>
-      {/* <Scene></Scene> */}
-      <Controller actions={actions} />
+      <Panel
+        actions={panelActions}
+        currentIndex={currentPanelIndex}
+        setCurrentIndex={setCurrentPanelIndex}
+      />
     </>
   );
 }

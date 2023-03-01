@@ -2,16 +2,15 @@ import { parkLocalStorageName } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { usePlayTime } from "@/hooks/usePlayTime";
-import { Action, Controller } from "@/modules/Controller";
-import { Quote } from "@/modules/Quote";
+import { Action } from "@/modules/Controller";
+import { Panel, PanelAction } from "@/modules/Panel";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { setPokemons } from "@/stores/saveSlices";
-import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { positionCenter } from "./_app";
 
 export default function Home() {
@@ -20,6 +19,7 @@ export default function Home() {
   const [park, setPark] = useLocalStorage(parkLocalStorageName, null);
   const dispatch = useAppDispatch();
   const [_, setSavePlayTime] = usePlayTime();
+  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
 
   useEffect(() => {
     // TOPに来た時点でparkのデータが残ってたらゴミなので削除
@@ -31,7 +31,8 @@ export default function Home() {
   const save = () => {
     dispatch(setPokemons(state.local.pokemons));
     setSavePlayTime();
-    console.log("セーブできました！");
+    const index = panelActions.findIndex((action) => action.label === "save");
+    setCurrentPanelIndex(index);
   };
 
   const start = () => {
@@ -45,12 +46,22 @@ export default function Home() {
     { label: "セーブする", fn: save },
   ];
 
+  const panelActions: PanelAction<"save">[] = [
+    {
+      text: "なにをしますか？",
+      controllerActions: actions,
+      isNextDisable: true,
+    },
+    {
+      label: "save",
+      text: "セーブできました！",
+      nextFn: () => setCurrentPanelIndex(0),
+    },
+  ];
+
   return (
     <>
       <SceneTitle title="サファリパーク前" />
-      <Quote>
-        <Typography>なにをしますか？</Typography>
-      </Quote>
       <Scene>
         <Box sx={{ ...positionCenter }}>
           <Image
@@ -61,7 +72,11 @@ export default function Home() {
           />
         </Box>
       </Scene>
-      <Controller actions={actions} />
+      <Panel
+        actions={panelActions}
+        currentIndex={currentPanelIndex}
+        setCurrentIndex={setCurrentPanelIndex}
+      />
     </>
   );
 }
