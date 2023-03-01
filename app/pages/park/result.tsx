@@ -1,12 +1,15 @@
 import { parkLocalStorageName } from "@/config";
 import { useAppDispatch } from "@/hooks";
+import { useFetchPokemons } from "@/hooks/useFetchPokemons";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
 import { Action } from "@/modules/Controller";
 import { Panel, PanelAction } from "@/modules/Panel";
 import { Scene } from "@/modules/Scene";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { addPokemons } from "@/stores/localDataSlices";
-import { Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -15,6 +18,9 @@ export default function ParkResult() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
+  const pokemons = useFetchPokemons(
+    park.capturePokemons.map((pokemon) => pokemon.id)
+  );
 
   useEffect(() => {
     if (park.isStart && park.remainBallCount > 0) {
@@ -43,17 +49,31 @@ export default function ParkResult() {
     <>
       <SceneTitle title="たんけん結果" />
       <Scene>
-        {park.capturePokemons.map((pokemon, index) => {
-          return (
-            <Typography
-              align="center"
-              key={`${index}-${pokemon.id}`}
-              suppressHydrationWarning
-            >
-              {pokemon.name}
-            </Typography>
-          );
-        })}
+        <Grid container spacing={2}>
+          {pokemons.map((pokemon, index) => {
+            return (
+              <Grid item sx={{ textAlign: "center" }} xs={2}>
+                <Typography
+                  align="center"
+                  key={`${index}-${pokemon.id}`}
+                  suppressHydrationWarning
+                >
+                  {pokemon.name}
+                </Typography>
+                <Image
+                  width="80"
+                  height="80"
+                  src={
+                    pokemon.sprites.front_default === ""
+                      ? "/images/book_unknown_picture.svg"
+                      : pokemon.sprites.front_default
+                  }
+                  alt={`No.${pokemon.id}: ${pokemon.name}`}
+                />
+              </Grid>
+            );
+          })}
+        </Grid>
       </Scene>
       {/** TODO: ニックネーム or 逃す */}
       <Panel
