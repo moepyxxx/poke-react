@@ -28,10 +28,20 @@ export default function Start() {
     router.push("/");
   };
 
+  const setName = () => {
+    setScene("setPlayerName");
+    setCurrentPanelIndex((index) => index + 1);
+  };
+
+  const setPartner = () => {
+    setScene("setFirstPokemon");
+    setCurrentPanelIndex((index) => index + 1);
+  };
+
   const panelActions: PanelAction<PanelActionLabel>[] = [
     {
       text: "こんにちは、ポケモンの世界へようこそ！サファリパークの冒険をはじめましょう。",
-      nextFn: () => setScene("setPlayerName"),
+      nextFn: setName,
     },
     { text: "はじめにあなたの名前を教えてください", isNextDisable: true },
     {
@@ -40,7 +50,7 @@ export default function Start() {
     },
     {
       text: "サファリパークだけできるポケモンへようこそ。たくさん遊んで月曜日にそなえましょう！",
-      nextFn: () => setScene("setFirstPokemon"),
+      nextFn: setPartner,
     },
     {
       text: "さあ、まずは最初のパートナーをきめましょう！",
