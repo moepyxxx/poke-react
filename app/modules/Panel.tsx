@@ -25,9 +25,6 @@ export const Panel = <T,>(props: React.PropsWithChildren<Props<T>>) => {
   }, [props.actions]);
 
   const changeNextPanelAction = () => {
-    if (current.isNextDisable === true) {
-      return;
-    }
     if (current.nextFn) {
       current.nextFn();
       return;
@@ -43,12 +40,15 @@ export const Panel = <T,>(props: React.PropsWithChildren<Props<T>>) => {
       {current.controllerActions ? (
         <Controller
           actions={current.controllerActions}
-          next={changeNextPanelAction}
+          next={current.isNextDisable ? undefined : changeNextPanelAction}
         />
       ) : (
         <></>
       )}
-      <Quote quote={current.text} next={changeNextPanelAction} />
+      <Quote
+        quote={current.text}
+        next={current.isNextDisable ? undefined : changeNextPanelAction}
+      />
     </>
   );
 };

@@ -8,11 +8,11 @@ export type Action = {
 };
 type Props = {
   actions: Action[];
-  next: () => void;
+  next?: () => void;
 };
 export const Controller: React.FC<Props> = ({ actions, next }) => {
   const clickAction = (fn: () => void) => {
-    next();
+    next ? next() : "";
     fn();
   };
 
