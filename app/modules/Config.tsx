@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 // TODO: middleware的な処理もついでにしているのでmiddlewareでlocalStorageの参照をできる道を探したい
 export const Config: React.FC = () => {
-  const [playtime] = usePlayTime();
+  const [playtime, , gameStart] = usePlayTime();
   const [_, setPark] = useLocalStorage("park", null);
   const router = useRouter();
   const save = useAppSelector((state) => state.save);
@@ -25,6 +25,7 @@ export const Config: React.FC = () => {
     }
 
     dispatch(setPokemons(state.save.pokemons));
+    gameStart();
   }, []);
 
   if (router.pathname === "/") {

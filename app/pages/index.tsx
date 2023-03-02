@@ -18,7 +18,7 @@ export default function Home() {
   const state = useAppSelector((state) => state);
   const [park, setPark] = useLocalStorage(parkLocalStorageName, null);
   const dispatch = useAppDispatch();
-  const [_, setSavePlayTime] = usePlayTime();
+  const [playTime, setSavePlayTime] = usePlayTime();
   const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
 
   useEffect(() => {
