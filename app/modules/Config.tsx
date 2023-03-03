@@ -28,6 +28,14 @@ export const Config: React.FC = () => {
     gameStart();
   }, []);
 
+  const playTime = (playtime: number) => {
+    const hour = ("00" + Math.floor((playtime % 86400) / 3600)).slice(-2);
+    const min = ("00" + Math.floor((playtime % 3600) / 60)).slice(-2);
+    const rem = ("00" + (playtime % 60)).slice(-2);
+
+    return `${hour}:${min}:${rem}`;
+  };
+
   if (router.pathname === "/") {
     return (
       <Box
@@ -40,7 +48,7 @@ export const Config: React.FC = () => {
         }}
       >
         <Typography suppressHydrationWarning>
-          プレイじかん：{playtime}
+          プレイじかん：{playTime(playtime)}
         </Typography>
         <Typography>
           なまえ：<span suppressHydrationWarning>{save.name}</span>
