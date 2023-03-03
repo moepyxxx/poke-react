@@ -27,7 +27,7 @@ const reducers: SliceCaseReducers<Save> = {
   setName: (state, action: PayloadAction<string>) => {
     state.name = action.payload;
   },
-  addPlayTime: (state, action: PayloadAction<number>) => {
+  setSavePlayTime: (state, action: PayloadAction<number>) => {
     state.playTime = state.playTime + action.payload;
   },
   setPokemons: (state, action: PayloadAction<Pokemon[]>) => {
@@ -44,7 +44,7 @@ export const saveSlice = createSlice<Save, SliceCaseReducers<Save>>({
   reducers,
 });
 
-export const { setName, addPlayTime, setPokemons, gameStart } =
+export const { setName, setSavePlayTime, setPokemons, gameStart } =
   saveSlice.actions;
 
 export const selectPlayer = (state: RootState) => state.save;

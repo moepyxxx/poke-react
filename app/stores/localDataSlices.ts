@@ -5,9 +5,13 @@ import { Pokemon } from "./saveSlices";
 
 type LocalData = {
   pokemons: Pokemon[];
+  playTime: number;
+  setPlayTime: number;
 };
 const initialState: LocalData = {
   pokemons: [],
+  playTime: 0,
+  setPlayTime: 0,
 };
 
 const reducers: SliceCaseReducers<LocalData> = {
@@ -16,6 +20,12 @@ const reducers: SliceCaseReducers<LocalData> = {
   },
   addPokemons: (state, action: PayloadAction<Pokemon[]>) => {
     state.pokemons = [...state.pokemons, ...action.payload];
+  },
+  setPlayTime: (state, action: PayloadAction<number>) => {
+    state.playTime = action.payload;
+  },
+  setStartPlayTime: (state, action: PayloadAction<number>) => {
+    state.setPlayTime = action.payload;
   },
 };
 
@@ -28,7 +38,8 @@ export const localDataSlice = createSlice<
   reducers,
 });
 
-export const { setPokemons, addPokemons } = localDataSlice.actions;
+export const { setPokemons, addPokemons, setPlayTime, setStartPlayTime } =
+  localDataSlice.actions;
 
 export const selectLocalData = (state: RootState) => state;
 

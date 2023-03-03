@@ -18,7 +18,7 @@ export default function Home() {
   const state = useAppSelector((state) => state);
   const [park, setPark] = useLocalStorage(parkLocalStorageName, null);
   const dispatch = useAppDispatch();
-  const [playTime, setSavePlayTime] = usePlayTime();
+  const [_, savePlayTime] = usePlayTime();
   const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
 
   useEffect(() => {
@@ -29,8 +29,8 @@ export default function Home() {
   }, []);
 
   const save = () => {
+    savePlayTime();
     dispatch(setPokemons(state.local.pokemons));
-    setSavePlayTime();
     const index = panelActions.findIndex((action) => action.label === "save");
     setCurrentPanelIndex(index);
   };
