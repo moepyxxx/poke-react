@@ -1,11 +1,14 @@
 import { Scene } from "@/pages/start";
 import { Dispatch, SetStateAction } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAppDispatch } from "@/hooks";
 import { setName } from "../../stores/saveSlices";
 import { nameSchema } from "../../config/schema";
+import { Button, TextField } from "@mui/material";
+import { Box } from "@mui/system";
+import { positionCenter } from "@/pages/_app";
 
 type Props = {
   setScene: Dispatch<SetStateAction<Scene>>;
@@ -26,6 +29,7 @@ export const SetPlayerName: React.FC<Props> = ({ setScene }) => {
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
@@ -38,12 +42,21 @@ export const SetPlayerName: React.FC<Props> = ({ setScene }) => {
   });
 
   return (
-    <>
+    <Box sx={{ ...positionCenter }}>
       <form onSubmit={onSubmit}>
-        <input {...register("name")} />
-        <p>{errors.name?.message}</p>
-        <input type="submit" />
+        <Controller
+          name="name"
+          control={control}
+          render={({ field }) => (
+            <TextField {...field} helperText={errors.name?.message} />
+          )}
+        />
+        <Box sx={{ mt: 1 }}>
+          <Button variant="contained" type="submit">
+            決定
+          </Button>
+        </Box>
       </form>
-    </>
+    </Box>
   );
 };
