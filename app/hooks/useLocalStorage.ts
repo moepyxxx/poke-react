@@ -1,6 +1,6 @@
+import { FieldPath } from "@/config/types";
 import { Pokemon } from "@/stores/saveSlices";
 import { useState } from "react";
-import { FieldPath } from "@/pages/park/[field]";
 
 export type Park = {
   isStart: boolean;

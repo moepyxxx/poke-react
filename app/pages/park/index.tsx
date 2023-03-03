@@ -8,7 +8,8 @@ import { useEffect, useState } from "react";
 export default function ParkIndex() {
   const router = useRouter();
   const [park, setPark] = useLocalStorage<Park>(parkLocalStorageName, null);
-  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
+  const [currentActionPanelIndex, setCurrentActionPanelIndex] =
+    useState<number>(0);
   const [panelActions, setPanelActions] = useState<PanelAction<"">[]>([]);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export default function ParkIndex() {
     if (!park) return;
     setPanelActions([
       {
-        text: `残りのボールが0になるまでサファリパーク内を探索しましょう（ボールの残り：${park.remainBallCount}）。`,
+        quote: `残りのボールが0になるまでサファリパーク内を探索しましょう（ボールの残り：${park.remainBallCount}）。`,
         controllerActions: [
           { label: "くさむらを探す", fn: () => router.push("/park/kusamura") },
         ],
@@ -39,8 +40,8 @@ export default function ParkIndex() {
       <SceneTitle title="サファリパーク内" />
       <Panel
         actions={panelActions}
-        currentIndex={currentPanelIndex}
-        setCurrentIndex={setCurrentPanelIndex}
+        currentActionIndex={currentActionPanelIndex}
+        setCurrentActionIndex={setCurrentActionPanelIndex}
       />
     </>
   );

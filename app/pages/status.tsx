@@ -15,7 +15,8 @@ export default function Status() {
   const capturePokemons = useFetchPokemons(
     local.pokemons.map((pokemon) => pokemon.id)
   );
-  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
+  const [currentActionPanelIndex, setCurrentActionPanelIndex] =
+    useState<number>(0);
 
   const actions: Action[] = [
     { label: "パーク前に戻る", fn: () => router.push("/") },
@@ -23,7 +24,7 @@ export default function Status() {
 
   const panelActions: PanelAction<"">[] = [
     {
-      text: "あなたのポケモンのステータスです。",
+      quote: "あなたのポケモンのステータスです。",
       controllerActions: actions,
       isNextDisable: true,
     },
@@ -58,8 +59,8 @@ export default function Status() {
       </Scene>
       <Panel
         actions={panelActions}
-        currentIndex={currentPanelIndex}
-        setCurrentIndex={setCurrentPanelIndex}
+        currentActionIndex={currentActionPanelIndex}
+        setCurrentActionIndex={setCurrentActionPanelIndex}
       />
     </div>
   );

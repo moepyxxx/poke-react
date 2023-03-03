@@ -36,7 +36,7 @@ const schema = yup
 
 export const SetPartner: React.FC<Props> = ({ setScene }) => {
   const dispatch = useAppDispatch();
-  const pokemons = useFetchPokemons(selectablePartnerIds);
+  const selectablePokemons = useFetchPokemons(selectablePartnerIds);
 
   const {
     register,
@@ -50,7 +50,9 @@ export const SetPartner: React.FC<Props> = ({ setScene }) => {
   const [currentSelectPartner, setCurrentPartner] = useState<PokeAPIPokemon>();
 
   useEffect(() => {
-    const pokemon = pokemons.find((pokemon) => pokemon.id == watch("id"));
+    const pokemon = selectablePokemons.find(
+      (pokemon) => pokemon.id == watch("id")
+    );
     if (!pokemon) return;
     setCurrentPartner(pokemon);
   }, [watch("id")]);
@@ -78,10 +80,10 @@ export const SetPartner: React.FC<Props> = ({ setScene }) => {
             valueAsNumber: true,
           })}
         >
-          {pokemons.map((p) => {
+          {selectablePokemons.map((pokemon) => {
             return (
-              <option key={p.id} value={p.id}>
-                {p.name}
+              <option key={pokemon.id} value={pokemon.id}>
+                {pokemon.name}
               </option>
             );
           })}

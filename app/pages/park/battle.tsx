@@ -21,7 +21,8 @@ export default function Battle() {
   );
   const [wildPokemon, setWildPokemon] = useState<PokeAPIPokemon | null>(null);
   const fetchWildPokemon = useFetchWildPokemon();
-  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
+  const [currentActionPanelIndex, setCurrentActionPanelIndex] =
+    useState<number>(0);
 
   useEffect(() => {
     if (isCapturePokemon == null) return;
@@ -41,7 +42,7 @@ export default function Battle() {
     const index = panelActions.findIndex(
       (action) => action.label === "runAway"
     );
-    setCurrentPanelIndex(index);
+    setCurrentActionPanelIndex(index);
   };
 
   const throwBall = () => {
@@ -50,7 +51,7 @@ export default function Battle() {
       const index = panelActions.findIndex(
         (action) => action.label === "BallIsGone"
       );
-      setCurrentPanelIndex(index);
+      setCurrentActionPanelIndex(index);
       return;
     }
 
@@ -69,7 +70,7 @@ export default function Battle() {
     const index = panelActions.findIndex(
       (action) => action.label === "capturePokemon"
     );
-    setCurrentPanelIndex(index);
+    setCurrentActionPanelIndex(index);
     const newPokemons = [
       ...park.capturePokemons,
       {
@@ -88,7 +89,7 @@ export default function Battle() {
     const index = panelActions.findIndex(
       (action) => action.label === "canNotCapturePokemon"
     );
-    setCurrentPanelIndex(index);
+    setCurrentActionPanelIndex(index);
   };
 
   const returnField = () => {
@@ -149,36 +150,36 @@ export default function Battle() {
     | "BallIsGone"
   >[] = [
     {
-      text: `あ、やせいの${wildPokemon?.name}があらわれた！`,
+      quote: `あ、やせいの${wildPokemon?.name}があらわれた！`,
     },
     {
       label: "selectAction",
-      text: "何をする？",
+      quote: "何をする？",
       controllerActions: captureActions,
       isNextDisable: true,
     },
     {
       label: "runAway",
-      text: "ここはいったんにげよう！",
+      quote: "ここはいったんにげよう！",
       nextFn: returnField,
     },
     {
       label: "canNotCapturePokemon",
-      text: "おしい、もうちょっとだったのに！",
-      nextFn: () => setCurrentPanelIndex(1),
+      quote: "おしい、もうちょっとだったのに！",
+      nextFn: () => setCurrentActionPanelIndex(1),
     },
     {
       label: "capturePokemon",
-      text: `やった！${wildPokemon?.name}を捕まえた！`,
+      quote: `やった！${wildPokemon?.name}を捕まえた！`,
     },
     {
-      text: `${wildPokemon?.name}のデータがあたらしく登録されました。`,
+      quote: `${wildPokemon?.name}のデータがあたらしく登録されました。`,
       nextFn: returnField,
     },
     {
       label: "BallIsGone",
-      text: "ああ、手持ちのボールがなくなってしまいました！",
-      nextFn: () => setCurrentPanelIndex(1),
+      quote: "ああ、手持ちのボールがなくなってしまいました！",
+      nextFn: () => setCurrentActionPanelIndex(1),
     },
   ];
 
@@ -187,8 +188,8 @@ export default function Battle() {
       <SceneTitle title={`バトル`} />
       <Panel
         actions={panelActions}
-        currentIndex={currentPanelIndex}
-        setCurrentIndex={setCurrentPanelIndex}
+        currentActionIndex={currentActionPanelIndex}
+        setCurrentActionIndex={setCurrentActionPanelIndex}
       />
       <Scene>
         <AppearPokemon />

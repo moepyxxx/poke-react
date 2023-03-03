@@ -21,7 +21,8 @@ export default function Start() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [scene, setScene] = useState<Scene>("opening");
-  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
+  const [currentActionPanelIndex, setCurrentActionPanelIndex] =
+    useState<number>(0);
   const state = useAppSelector((state) => state);
 
   const start = () => {
@@ -30,40 +31,42 @@ export default function Start() {
 
   const setName = () => {
     setScene("setPlayerName");
-    setCurrentPanelIndex((index) => index + 1);
+    setCurrentActionPanelIndex((index) => index + 1);
   };
 
   const setPartner = () => {
     setScene("setFirstPokemon");
-    setCurrentPanelIndex((index) => index + 1);
+    setCurrentActionPanelIndex((index) => index + 1);
   };
 
   const panelActions: PanelAction<PanelActionLabel>[] = [
     {
-      text: "こんにちは、ポケモンの世界へようこそ！サファリパークの冒険をはじめましょう。",
+      quote:
+        "こんにちは、ポケモンの世界へようこそ！サファリパークの冒険をはじめましょう。",
       nextFn: setName,
     },
-    { text: "はじめにあなたの名前を教えてください", isNextDisable: true },
+    { quote: "はじめにあなたの名前を教えてください", isNextDisable: true },
     {
-      text: `あらためまして、こんにちは、${state.save.name}さん！`,
+      quote: `あらためまして、こんにちは、${state.save.name}さん！`,
       label: "greeting",
     },
     {
-      text: "サファリパークだけできるポケモンへようこそ。たくさん遊んで月曜日にそなえましょう！",
+      quote:
+        "サファリパークだけできるポケモンへようこそ。たくさん遊んで月曜日にそなえましょう！",
       nextFn: setPartner,
     },
     {
-      text: "さあ、まずは最初のパートナーをきめましょう！",
+      quote: "さあ、まずは最初のパートナーをきめましょう！",
       isNextDisable: false,
     },
     {
-      text: `${state.save.name}さんとパートナーの${
+      quote: `${state.save.name}さんとパートナーの${
         state.local.pokemons[0]?.name ?? ""
       }の、最初のデータがすべてきちんと作成されました！`,
       label: "closingTalk",
     },
     {
-      text: "こまめにセーブをするのは、忘れないでくださいね。",
+      quote: "こまめにセーブをするのは、忘れないでくださいね。",
       nextFn: start,
     },
   ];
@@ -71,7 +74,7 @@ export default function Start() {
   useEffect(() => {
     if (scene === "greeting" || scene === "closingTalk") {
       const index = panelActions.findIndex((action) => action.label === scene);
-      setCurrentPanelIndex(index);
+      setCurrentActionPanelIndex(index);
     }
     if (scene === "closingTalk") {
       dispatch(gameStart(""));
@@ -97,8 +100,8 @@ export default function Start() {
       </Scene>
       <Panel
         actions={panelActions}
-        currentIndex={currentPanelIndex}
-        setCurrentIndex={setCurrentPanelIndex}
+        currentActionIndex={currentActionPanelIndex}
+        setCurrentActionIndex={setCurrentActionPanelIndex}
       />
     </>
   );

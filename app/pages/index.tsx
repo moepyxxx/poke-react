@@ -19,7 +19,8 @@ export default function Home() {
   const [park, setPark] = useLocalStorage(parkLocalStorageName, null);
   const dispatch = useAppDispatch();
   const [_, savePlayTime] = usePlayTime();
-  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
+  const [currentActionPanelIndex, setCurrentActionPanelIndex] =
+    useState<number>(0);
 
   useEffect(() => {
     // TOPに来た時点でparkのデータが残ってたらゴミなので削除
@@ -32,7 +33,7 @@ export default function Home() {
     savePlayTime();
     dispatch(setPokemons(state.local.pokemons));
     const index = panelActions.findIndex((action) => action.label === "save");
-    setCurrentPanelIndex(index);
+    setCurrentActionPanelIndex(index);
   };
 
   const start = () => {
@@ -48,14 +49,14 @@ export default function Home() {
 
   const panelActions: PanelAction<"save">[] = [
     {
-      text: "なにをしますか？",
+      quote: "なにをしますか？",
       controllerActions: actions,
       isNextDisable: true,
     },
     {
       label: "save",
-      text: "セーブできました！",
-      nextFn: () => setCurrentPanelIndex(0),
+      quote: "セーブできました！",
+      nextFn: () => setCurrentActionPanelIndex(0),
     },
   ];
 
@@ -74,8 +75,8 @@ export default function Home() {
       </Scene>
       <Panel
         actions={panelActions}
-        currentIndex={currentPanelIndex}
-        setCurrentIndex={setCurrentPanelIndex}
+        currentActionIndex={currentActionPanelIndex}
+        setCurrentActionIndex={setCurrentActionPanelIndex}
       />
     </>
   );

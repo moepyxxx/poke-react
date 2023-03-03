@@ -4,50 +4,56 @@ import { Quote } from "./Quote";
 
 export type PanelAction<T> = {
   label?: T;
-  text: string;
+  quote: string;
   controllerActions?: Action[];
   nextFn?: () => void;
   isNextDisable?: boolean;
 };
 type Props<T> = {
   actions: PanelAction<T>[];
-  currentIndex: number;
-  setCurrentIndex: Dispatch<SetStateAction<number>>;
+  currentActionIndex: number;
+  setCurrentActionIndex: Dispatch<SetStateAction<number>>;
 };
 export const Panel = <T,>(props: React.PropsWithChildren<Props<T>>) => {
-  const [current, setCurrent] = useState<PanelAction<T>>(props.actions[0]);
-  const [isLast, setIsLast] = useState<boolean>(false);
+  const [currentAction, setCurrentAction] = useState<PanelAction<T>>(
+    props.actions[0]
+  );
+  const [isLastAction, setIsLastAction] = useState<boolean>(false);
 
   useEffect(() => {
-    setCurrent(props.actions[props.currentIndex]);
-    if (props.currentIndex !== props.actions.length - 1) return;
-    setIsLast(true);
+    setCurrentAction(props.actions[props.currentActionIndex]);
+    if (props.currentActionIndex !== props.actions.length - 1) return;
+    setIsLastAction(true);
   }, [props.actions]);
 
   const changeNextPanelAction = () => {
-    if (current.nextFn) {
-      current.nextFn();
+    if (currentAction.nextFn) {
+      currentAction.nextFn();
       return;
     }
-    if (isLast) return;
-    props.setCurrentIndex((index) => index + 1);
+    if (isLastAction) return;
+    props.setCurrentActionIndex((index) => index + 1);
   };
 
-  if (!current) return <></>;
+  if (!currentAction) return <></>;
 
   return (
     <>
-      {current.controllerActions ? (
+      {currentAction.controllerActions ? (
         <Controller
-          actions={current.controllerActions}
-          next={current.isNextDisable ? undefined : changeNextPanelAction}
+          actions={currentAction.controllerActions}
+          nextAction={
+            currentAction.isNextDisable ? undefined : changeNextPanelAction
+          }
         />
       ) : (
         <></>
       )}
       <Quote
-        quote={current.text}
-        next={current.isNextDisable ? undefined : changeNextPanelAction}
+        quote={currentAction.quote}
+        nextAction={
+          currentAction.isNextDisable ? undefined : changeNextPanelAction
+        }
       />
     </>
   );

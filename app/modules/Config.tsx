@@ -1,4 +1,3 @@
-import { theme } from "@/config/muiTheme";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { usePlayTime } from "@/hooks/usePlayTime";
@@ -13,13 +12,12 @@ export const Config: React.FC = () => {
   const [playtime, , gameStart] = usePlayTime();
   const [_, setPark] = useLocalStorage("park", null);
   const router = useRouter();
-  const save = useAppSelector((state) => state.save);
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state);
 
   useEffect(() => {
     // ゲーム開始していない場合は初期化
-    if (!save.isGameStart) {
+    if (!state.save.isGameStart) {
       setPark(null);
       router.push("start");
     }
@@ -51,7 +49,7 @@ export const Config: React.FC = () => {
           プレイじかん：{playTime(playtime)}
         </Typography>
         <Typography>
-          なまえ：<span suppressHydrationWarning>{save.name}</span>
+          なまえ：<span suppressHydrationWarning>{state.save.name}</span>
         </Typography>
       </Box>
     );

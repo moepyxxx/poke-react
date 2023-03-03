@@ -16,7 +16,8 @@ export default function ParkResult() {
   const [park, setPark] = useLocalStorage<Park>(parkLocalStorageName, null);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
+  const [currentActionPanelIndex, setCurrentActionPanelIndex] =
+    useState<number>(0);
   const pokemons = useFetchPokemons(
     park ? park.capturePokemons.map((pokemon) => pokemon.id) : []
   );
@@ -40,7 +41,7 @@ export default function ParkResult() {
   const actions: Action[] = [{ label: "パーク前に戻る", fn: returnToTop }];
   const panelActions: PanelAction<"">[] = [
     {
-      text: `おめでとう。あなたはサファリパークでポケモンを${park?.capturePokemons.length}ひきゲットしました！`,
+      quote: `おめでとう。あなたはサファリパークでポケモンを${park?.capturePokemons.length}ひきゲットしました！`,
       controllerActions: actions,
       isNextDisable: true,
     },
@@ -82,8 +83,8 @@ export default function ParkResult() {
       {/** TODO: ニックネーム or 逃す */}
       <Panel
         actions={panelActions}
-        currentIndex={currentPanelIndex}
-        setCurrentIndex={setCurrentPanelIndex}
+        currentActionIndex={currentActionPanelIndex}
+        setCurrentActionIndex={setCurrentActionPanelIndex}
       />
     </>
   );

@@ -6,13 +6,14 @@ export type Action = {
   fn: () => void;
   hidden?: boolean;
 };
+
 type Props = {
   actions: Action[];
-  next?: () => void;
+  nextAction?: () => void;
 };
-export const Controller: React.FC<Props> = ({ actions, next }) => {
-  const clickAction = (fn: () => void) => {
-    next ? next() : "";
+export const Controller: React.FC<Props> = ({ actions, nextAction }) => {
+  const onClickAction = (fn: () => void) => {
+    nextAction ? nextAction() : "";
     fn();
   };
 
@@ -35,7 +36,7 @@ export const Controller: React.FC<Props> = ({ actions, next }) => {
         }
         return (
           <Box key={index}>
-            <Button variant="text" onClick={() => clickAction(action.fn)}>
+            <Button variant="text" onClick={() => onClickAction(action.fn)}>
               {action.label}
             </Button>
           </Box>

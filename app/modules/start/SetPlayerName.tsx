@@ -28,7 +28,6 @@ export const SetPlayerName: React.FC<Props> = ({ setScene }) => {
   const dispatch = useAppDispatch();
 
   const {
-    register,
     control,
     handleSubmit,
     formState: { errors },

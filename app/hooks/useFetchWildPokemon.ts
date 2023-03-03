@@ -2,6 +2,7 @@ import { pokeAPIEndpoint } from "@/config";
 import { PokeAPIPokemon } from "@/config/types";
 import { randomPokemonId } from "@/config/utils";
 
+// TODO: react-queryにする
 const fetchPokemon = async (id: number): Promise<PokeAPIPokemon> => {
   return fetch(pokeAPIEndpoint + "pokemon/" + id).then((res) => res.json());
 };

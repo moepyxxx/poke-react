@@ -1,5 +1,6 @@
 import { parkLocalStorageName } from "@/config";
-import { randomResult } from "@/config/utils";
+import { FieldPath } from "@/config/types";
+import { parseFieldName, randomResult } from "@/config/utils";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
 import { Action } from "@/modules/Controller";
 import { Panel, PanelAction } from "@/modules/Panel";
@@ -8,22 +9,12 @@ import { SceneTitle } from "@/modules/SceneTitle";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export type FieldPath = "kusamura";
-
-const parseFieldName = (path: FieldPath): string => {
-  switch (path) {
-    case "kusamura":
-      return "くさむら";
-    default:
-      return "";
-  }
-};
-
 export default function FieldIndex() {
   const router = useRouter();
   const field = router.query.field as FieldPath;
   const [park, setPark] = useLocalStorage<Park>(parkLocalStorageName, null);
-  const [currentPanelIndex, setCurrentPanelIndex] = useState<number>(0);
+  const [currentActionPanelIndex, setCurrentActionPanelIndex] =
+    useState<number>(0);
 
   useEffect(() => {
     if (!park) return;
@@ -53,7 +44,7 @@ export default function FieldIndex() {
       const index = panelActions.findIndex(
         (action) => action.label === "notAppearPokemon"
       );
-      setCurrentPanelIndex(index);
+      setCurrentActionPanelIndex(index);
       return;
     }
   };
@@ -78,7 +69,7 @@ export default function FieldIndex() {
 
   const panelActions: PanelAction<"notAppearPokemon">[] = [
     {
-      text: `${parseFieldName(
+      quote: `${parseFieldName(
         field
       )}でポケモンを探しましょう！（ボールの残り：${park?.remainBallCount}）`,
       controllerActions: fieldActions,
@@ -86,8 +77,8 @@ export default function FieldIndex() {
     },
     {
       label: "notAppearPokemon",
-      text: "ここには何もいないようだ",
-      nextFn: () => setCurrentPanelIndex(0),
+      quote: "ここには何もいないようだ",
+      nextFn: () => setCurrentActionPanelIndex(0),
     },
   ];
 
@@ -96,8 +87,8 @@ export default function FieldIndex() {
       <SceneTitle title={`サファリパーク内 - ${parseFieldName(field)}`} />
       <Panel
         actions={panelActions}
-        currentIndex={currentPanelIndex}
-        setCurrentIndex={setCurrentPanelIndex}
+        currentActionIndex={currentActionPanelIndex}
+        setCurrentActionIndex={setCurrentActionPanelIndex}
       />
       <Scene>
         <></>

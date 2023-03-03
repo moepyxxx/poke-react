@@ -1,4 +1,5 @@
 import { pokemonBookRangeMax, pokemonBookRangeMin } from ".";
+import { FieldPath } from "./types";
 
 export const parseJPPokemonName = (name: string): string => {
   switch (name) {
@@ -10,6 +11,15 @@ export const parseJPPokemonName = (name: string): string => {
       return "ワニノコ";
     default:
       return name;
+  }
+};
+
+export const parseFieldName = (path: FieldPath): string => {
+  switch (path) {
+    case "kusamura":
+      return "くさむら";
+    default:
+      return "";
   }
 };
 

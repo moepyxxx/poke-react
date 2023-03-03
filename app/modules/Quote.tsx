@@ -4,12 +4,12 @@ import ChangeHistoryIcon from "@mui/icons-material/ChangeHistory";
 
 type Props = {
   quote: string;
-  next?: () => void;
+  nextAction?: () => void;
 };
-export const Quote: React.FC<Props> = ({ quote, next }) => {
+export const Quote: React.FC<Props> = ({ quote, nextAction }) => {
   return (
     <Box
-      onClick={next}
+      onClick={nextAction}
       sx={{
         position: "absolute",
         width: "calc(100% - 48px)",
@@ -21,7 +21,7 @@ export const Quote: React.FC<Props> = ({ quote, next }) => {
       }}
     >
       <Typography>{quote}</Typography>
-      {next ? (
+      {nextAction ? (
         <ChangeHistoryIcon
           sx={{
             fontSize: 12,

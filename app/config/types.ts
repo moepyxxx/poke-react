@@ -6,3 +6,5 @@ export type PokeAPIPokemon = {
     front_default: string;
   };
 };
+
+export type FieldPath = "kusamura";
