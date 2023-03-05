@@ -1,12 +1,29 @@
 import { SingleBoxBorder } from "@/pages/_app";
 import { Box, Typography } from "@mui/material";
 import ChangeHistoryIcon from "@mui/icons-material/ChangeHistory";
+import { animated, useSprings } from "@react-spring/web";
+import { useEffect, useState } from "react";
+
+const to = (i: number) => ({
+  opacity: 1,
+  delay: i * 50,
+});
 
 type Props = {
   quote: string;
   nextAction?: () => void;
 };
 export const Quote: React.FC<Props> = ({ quote, nextAction }) => {
+  const [props, api] = useSprings(quote.split("").length, (i) => ({
+    ...to(i),
+    from: {
+      opacity: 0,
+    },
+    reset: true,
+  }));
+
+  const AnimatedTypography = animated(Typography);
+
   return (
     <Box
       onClick={nextAction}
@@ -20,7 +37,14 @@ export const Quote: React.FC<Props> = ({ quote, nextAction }) => {
         ...SingleBoxBorder,
       }}
     >
-      <Typography>{quote}</Typography>
+      {props.map((props, index) => (
+        <AnimatedTypography
+          sx={{ display: "inline", opacity: 0 }}
+          style={props}
+        >
+          {quote.split("")[index]}
+        </AnimatedTypography>
+      ))}
       {nextAction ? (
         <ChangeHistoryIcon
           sx={{
