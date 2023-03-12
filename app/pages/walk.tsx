@@ -67,6 +67,11 @@ export default function Walk() {
   }, [currentCoordinateStart]);
 
   const onLeft = () => {
+    if (heroDirection !== "left") {
+      setHeroDirection("left");
+      return;
+    }
+
     const canLeft =
       currentMiddleCoordinate.x - 1 > Math.floor(screenBlockCount / 2);
 
@@ -79,6 +84,11 @@ export default function Walk() {
   };
 
   const onRight = () => {
+    if (heroDirection !== "right") {
+      setHeroDirection("right");
+      return;
+    }
+
     const canRight =
       currentMiddleCoordinate.x + 1 <=
       allBlockCount - Math.floor(screenBlockCount / 2);
@@ -91,11 +101,16 @@ export default function Walk() {
     }
   };
 
-  const onTop = () => {
-    const canTop =
+  const onAbove = () => {
+    if (heroDirection !== "above") {
+      setHeroDirection("above");
+      return;
+    }
+
+    const canAbove =
       currentMiddleCoordinate.y - 1 > Math.floor(screenBlockCount / 2);
 
-    if (canTop) {
+    if (canAbove) {
       setCurrentMiddleCoordinate({
         x: currentMiddleCoordinate.x,
         y: currentMiddleCoordinate.y - 1,
@@ -103,12 +118,17 @@ export default function Walk() {
     }
   };
 
-  const onBottom = () => {
-    const canBottom =
+  const onBelow = () => {
+    if (heroDirection !== "below") {
+      setHeroDirection("below");
+      return;
+    }
+
+    const canBelow =
       currentMiddleCoordinate.y + 1 <=
       allBlockCount - Math.floor(screenBlockCount / 2);
 
-    if (canBottom) {
+    if (canBelow) {
       setCurrentMiddleCoordinate({
         x: currentMiddleCoordinate.x,
         y: currentMiddleCoordinate.y + 1,
@@ -136,8 +156,8 @@ export default function Walk() {
       })}
       <button onClick={onLeft}>left</button>
       <button onClick={onRight}>right</button>
-      <button onClick={onTop}>top</button>
-      <button onClick={onBottom}>bottom</button>
+      <button onClick={onAbove}>top</button>
+      <button onClick={onBelow}>bottom</button>
     </Grid>
   );
 }
