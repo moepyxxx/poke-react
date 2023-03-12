@@ -1,4 +1,4 @@
-import { Coordinate, Field } from "@/config/field";
+import { Coordinate, Field } from "@/config/types";
 import { Box } from "@mui/material";
 import { isEqual } from "lodash-es";
 import { FieldObjectImage } from "./FieldObjectImage";

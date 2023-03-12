@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Unstable_Grid2";
-import { useEffect, useState } from "react";
-import { Coordinate, Field } from "@/config/field";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ActionEvent, Coordinate, Field } from "@/config/types";
 import { FieldContainer } from "@/modules/field/FieldContainer";
 import { Direction } from "./FieldContainer";
 
@@ -22,24 +22,24 @@ const getScreenFieldBlocks = (
   return blocks;
 };
 
-type Props = {
+type Props<T, U> = {
   field: Field;
   screenBlockCount: number;
   allBlockCount: number;
+  actionEvent: ActionEvent<T, U> | null;
+  setActionEvent: Dispatch<SetStateAction<ActionEvent<T, U> | null>>;
 };
 
-export const WalkField: React.FC<Props> = ({
-  field,
-  screenBlockCount,
-  allBlockCount,
-}) => {
+export const WalkField = <T, U>(
+  props: React.PropsWithChildren<Props<T, U>>
+) => {
   const initMiddleCoordinate: Coordinate = {
-    x: Math.ceil(allBlockCount / 2),
-    y: Math.ceil(allBlockCount / 2),
+    x: Math.ceil(props.allBlockCount / 2),
+    y: Math.ceil(props.allBlockCount / 2),
   };
   const initStartCoordinate: Coordinate = {
-    x: initMiddleCoordinate.x - Math.floor(screenBlockCount / 2),
-    y: initMiddleCoordinate.y - Math.floor(screenBlockCount / 2),
+    x: initMiddleCoordinate.x - Math.floor(props.screenBlockCount / 2),
+    y: initMiddleCoordinate.y - Math.floor(props.screenBlockCount / 2),
   };
 
   const [currentStartCoordinate, setCurrentStartCoordinate] =
@@ -55,15 +55,34 @@ export const WalkField: React.FC<Props> = ({
   const [heroDirection, setHeroDirection] = useState<Direction>("below");
 
   useEffect(() => {
+    if (!props.actionEvent) return;
+
+    switch (props.actionEvent.event) {
+      case "pushLeft":
+        onLeft();
+        break;
+      case "pushBelow":
+        onBelow();
+        break;
+      case "pushRight":
+        onRight();
+        break;
+      case "pushAbove":
+        onAbove();
+        break;
+    }
+  }, [props.actionEvent]);
+
+  useEffect(() => {
     setCurrentStartCoordinate({
-      x: currentMiddleCoordinate.x - Math.floor(screenBlockCount / 2),
-      y: currentMiddleCoordinate.y - Math.floor(screenBlockCount / 2),
+      x: currentMiddleCoordinate.x - Math.floor(props.screenBlockCount / 2),
+      y: currentMiddleCoordinate.y - Math.floor(props.screenBlockCount / 2),
     });
   }, [currentMiddleCoordinate]);
 
   useEffect(() => {
     setCurrentScreenFieldBlocks(
-      getScreenFieldBlocks(currentStartCoordinate, screenBlockCount)
+      getScreenFieldBlocks(currentStartCoordinate, props.screenBlockCount)
     );
   }, [currentStartCoordinate]);
 
@@ -74,7 +93,7 @@ export const WalkField: React.FC<Props> = ({
     }
 
     const canLeft =
-      currentMiddleCoordinate.x - 1 > Math.floor(screenBlockCount / 2);
+      currentMiddleCoordinate.x - 1 > Math.floor(props.screenBlockCount / 2);
 
     if (canLeft) {
       setCurrentMiddleCoordinate({
@@ -92,7 +111,7 @@ export const WalkField: React.FC<Props> = ({
 
     const canRight =
       currentMiddleCoordinate.x + 1 <=
-      allBlockCount - Math.floor(screenBlockCount / 2);
+      props.allBlockCount - Math.floor(props.screenBlockCount / 2);
 
     if (canRight) {
       setCurrentMiddleCoordinate({
@@ -109,7 +128,7 @@ export const WalkField: React.FC<Props> = ({
     }
 
     const canAbove =
-      currentMiddleCoordinate.y - 1 > Math.floor(screenBlockCount / 2);
+      currentMiddleCoordinate.y - 1 > Math.floor(props.screenBlockCount / 2);
 
     if (canAbove) {
       setCurrentMiddleCoordinate({
@@ -127,7 +146,7 @@ export const WalkField: React.FC<Props> = ({
 
     const canBelow =
       currentMiddleCoordinate.y + 1 <=
-      allBlockCount - Math.floor(screenBlockCount / 2);
+      props.allBlockCount - Math.floor(props.screenBlockCount / 2);
 
     if (canBelow) {
       setCurrentMiddleCoordinate({
@@ -149,16 +168,12 @@ export const WalkField: React.FC<Props> = ({
             <FieldContainer
               currentCoordinate={block}
               middleCoordinate={currentMiddleCoordinate}
-              field={field}
+              field={props.field}
               heroDirection={heroDirection}
             />
           </Grid>
         );
       })}
-      <button onClick={onLeft}>left</button>
-      <button onClick={onRight}>right</button>
-      <button onClick={onAbove}>top</button>
-      <button onClick={onBelow}>bottom</button>
     </Grid>
   );
 };

@@ -1,9 +1,8 @@
 import { parkLocalStorageName } from "@/config";
-import { FieldPath } from "@/config/types";
+import { FieldPath, PanelAction, SelectAction } from "@/config/types";
 import { parseFieldName, randomResult } from "@/config/utils";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
-import { Action } from "@/modules/SelectPanel";
-import { Panel, PanelAction } from "@/modules/Panel";
+import { Panel } from "@/modules/Panel";
 import { FieldScreen } from "@/modules/FieldScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { useRouter } from "next/router";
@@ -49,7 +48,7 @@ export default function FieldIndex() {
     }
   };
 
-  const fieldActions: Action[] = [
+  const fieldActions: SelectAction[] = [
     {
       label: "パークを出る",
       fn: goToResult,
@@ -72,7 +71,7 @@ export default function FieldIndex() {
       quote: `${parseFieldName(
         field
       )}でポケモンを探しましょう！（ボールの残り：${park?.remainBallCount}）`,
-      controllerActions: fieldActions,
+      selectableActions: fieldActions,
       isNextDisable: true,
     },
     {

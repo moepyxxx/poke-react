@@ -1,4 +1,3 @@
-import { Scene } from "@/pages/status/start";
 import { Dispatch, SetStateAction } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,10 +8,8 @@ import { nameSchema } from "../../config/schema";
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { positionCenter } from "@/pages/_app";
-
-type Props = {
-  setScene: Dispatch<SetStateAction<Scene>>;
-};
+import { ActionEvent } from "@/config/types";
+import { v4 as uuidv4 } from "uuid";
 
 type FormData = {
   name: string;
@@ -24,7 +21,14 @@ const schema = yup
   })
   .required();
 
-export const SetPlayerName: React.FC<Props> = ({ setScene }) => {
+type Props<T, U> = {
+  nextEvent: ActionEvent<T, U>["event"];
+  setActionEvent: Dispatch<SetStateAction<ActionEvent<T, U> | null>>;
+};
+
+export const SetPlayerName = <T, U>(
+  props: React.PropsWithChildren<Props<T, U>>
+) => {
   const dispatch = useAppDispatch();
 
   const {
@@ -37,7 +41,10 @@ export const SetPlayerName: React.FC<Props> = ({ setScene }) => {
 
   const onSubmit = handleSubmit((data) => {
     dispatch(setName(data.name));
-    setScene("greeting");
+    props.setActionEvent({
+      uuid: uuidv4(),
+      event: props.nextEvent,
+    });
   });
 
   return (

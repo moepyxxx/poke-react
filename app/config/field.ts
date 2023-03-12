@@ -1,37 +1,4 @@
-export type Coordinate = {
-  x: number;
-  y: number;
-};
-
-export type FieldType = "grass" | "indoor" | "river" | "load" | "nothing";
-
-export type FieldObject = {
-  url: string;
-  alt: string;
-  widthUnit?: number;
-  heightUnit?: number;
-};
-
-export type Action = {
-  left: () => void;
-  top: () => void;
-  right: () => void;
-  bottom: () => void;
-};
-
-export type Block = {
-  coordinate: Coordinate;
-  fieldType: FieldType;
-  object?: FieldObject;
-  action?: Action;
-  isScreen?: boolean;
-  canPass?: boolean;
-};
-
-export type Field = {
-  fieldName: string;
-  blocks: Block[];
-};
+import { Block, Field } from "./types";
 
 export const createFieldInFrontOfSafariPark = (
   allBlockCount: number

@@ -1,4 +1,3 @@
-import { Scene } from "@/pages/status/start";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,12 +8,9 @@ import { nameSchema } from "../../config/schema";
 import { selectablePartnerIds } from "@/config";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
 import Image from "next/image";
-import { PokeAPIPokemon } from "@/config/types";
+import { ActionEvent, PokeAPIPokemon } from "@/config/types";
 import { addPokemons } from "@/stores/localDataSlices";
-
-type Props = {
-  setScene: Dispatch<SetStateAction<Scene>>;
-};
+import { v4 as uuidv4 } from "uuid";
 
 type FormData = Pick<Pokemon, "id" | "nickname"> & { isNickname: boolean };
 
@@ -34,7 +30,14 @@ const schema = yup
   })
   .required();
 
-export const SetPartner: React.FC<Props> = ({ setScene }) => {
+type Props<T, U> = {
+  nextEvent: ActionEvent<T, U>["event"];
+  setActionEvent: Dispatch<SetStateAction<ActionEvent<T, U> | null>>;
+};
+
+export const SetPartner = <T, U>(
+  props: React.PropsWithChildren<Props<T, U>>
+) => {
   const dispatch = useAppDispatch();
   const selectablePokemons = useFetchPokemons(selectablePartnerIds);
 
@@ -69,7 +72,10 @@ export const SetPartner: React.FC<Props> = ({ setScene }) => {
         },
       ])
     );
-    setScene("closingTalk");
+    props.setActionEvent({
+      uuid: uuidv4(),
+      event: props.nextEvent,
+    });
   });
 
   return (

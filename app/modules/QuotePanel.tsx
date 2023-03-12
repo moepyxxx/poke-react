@@ -2,31 +2,49 @@ import { SingleBoxBorder } from "@/pages/_app";
 import { Box, Typography } from "@mui/material";
 import ChangeHistoryIcon from "@mui/icons-material/ChangeHistory";
 import { animated, useSprings } from "@react-spring/web";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ActionEvent, PanelAction, SelectAction } from "@/config/types";
+import { v4 as uuidv4 } from "uuid";
 
 const to = (i: number) => ({
   opacity: 1,
   delay: i * 50,
 });
 
-type Props = {
-  quote: string;
-  nextAction?: () => void;
+type Props<T, U> = {
+  action: PanelAction<T, U>;
+  setActionEvent: Dispatch<SetStateAction<ActionEvent<T, U> | null>>;
 };
-export const QuotePanel: React.FC<Props> = ({ quote, nextAction }) => {
-  const [props, api] = useSprings(quote.split("").length, (i) => ({
-    ...to(i),
-    from: {
-      opacity: 0,
-    },
-    reset: true,
-  }));
+
+export const QuotePanel = <T, U>(
+  props: React.PropsWithChildren<Props<T, U>>
+) => {
+  const [styleProps, api] = useSprings(
+    props.action.quote.split("").length,
+    (i) => ({
+      ...to(i),
+      from: {
+        opacity: 0,
+      },
+      reset: true,
+    })
+  );
+
+  // TODO: 出力はコントローラからなので削除
+  const onClickAction = () => {
+    props.action.nextEvent
+      ? props.setActionEvent({
+          uuid: uuidv4(),
+          event: props.action.nextEvent,
+        })
+      : "";
+  };
 
   const AnimatedTypography = animated(Typography);
 
   return (
     <Box
-      onClick={nextAction}
+      onClick={onClickAction}
       sx={{
         position: "absolute",
         width: "100%",
@@ -37,15 +55,15 @@ export const QuotePanel: React.FC<Props> = ({ quote, nextAction }) => {
         ...SingleBoxBorder,
       }}
     >
-      {props.map((props, index) => (
+      {styleProps.map((styleProp, index) => (
         <AnimatedTypography
           sx={{ display: "inline", opacity: 0 }}
-          style={props}
+          style={styleProp}
         >
-          {quote.split("")[index]}
+          {props.action.quote.split("")[index]}
         </AnimatedTypography>
       ))}
-      {nextAction ? (
+      {props.action.nextEvent ? (
         <ChangeHistoryIcon
           sx={{
             fontSize: 12,

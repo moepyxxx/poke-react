@@ -1,6 +1,7 @@
 import { parkLocalStorageName } from "@/config";
+import { PanelAction } from "@/config/types";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
-import { Panel, PanelAction } from "@/modules/Panel";
+import { Panel } from "@/modules/Panel";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -28,7 +29,7 @@ export default function ParkIndex() {
     setPanelActions([
       {
         quote: `残りのボールが0になるまでサファリパーク内を探索しましょう（ボールの残り：${park.remainBallCount}）。`,
-        controllerActions: [
+        selectableActions: [
           { label: "くさむらを探す", fn: () => router.push("/park/kusamura") },
         ],
       },

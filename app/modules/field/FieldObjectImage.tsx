@@ -1,4 +1,4 @@
-import { Block, FieldObject } from "@/config/field";
+import { Block, FieldObject } from "@/config/types";
 import { zIndex } from "@/config/style";
 import { Box } from "@mui/material";
 import Image from "next/image";

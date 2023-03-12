@@ -2,8 +2,7 @@ import { parkLocalStorageName } from "@/config";
 import { useAppDispatch } from "@/hooks";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
-import { Action } from "@/modules/SelectPanel";
-import { Panel, PanelAction } from "@/modules/Panel";
+import { Panel } from "@/modules/Panel";
 import { FieldScreen } from "@/modules/FieldScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { addPokemons } from "@/stores/localDataSlices";
@@ -11,6 +10,7 @@ import { Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { PanelAction, SelectAction } from "@/config/types";
 
 export default function ParkResult() {
   const [park, setPark] = useLocalStorage<Park>(parkLocalStorageName, null);
@@ -38,11 +38,13 @@ export default function ParkResult() {
     router.push("/");
   };
 
-  const actions: Action[] = [{ label: "パーク前に戻る", fn: returnToTop }];
+  const actions: SelectAction[] = [
+    { label: "パーク前に戻る", fn: returnToTop },
+  ];
   const panelActions: PanelAction<"">[] = [
     {
       quote: `おめでとう。あなたはサファリパークでポケモンを${park?.capturePokemons.length}ひきゲットしました！`,
-      controllerActions: actions,
+      selectableActions: actions,
       isNextDisable: true,
     },
   ];

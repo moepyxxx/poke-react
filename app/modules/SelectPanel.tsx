@@ -1,20 +1,24 @@
+import { ActionEvent, SelectAction } from "@/config/types";
 import { SingleBoxBorder } from "@/pages/_app";
 import { Box, Button } from "@mui/material";
+import { Dispatch, SetStateAction } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-export type Action = {
-  label: string;
-  fn: () => void;
-  hidden?: boolean;
+type Props<T, U> = {
+  actions: SelectAction<U>[];
+  setActionEvent: Dispatch<SetStateAction<ActionEvent<T, U> | null>>;
 };
 
-type Props = {
-  actions: Action[];
-  nextAction?: () => void;
-};
-export const SelectPanel: React.FC<Props> = ({ actions, nextAction }) => {
-  const onClickAction = (fn: () => void) => {
-    nextAction ? nextAction() : "";
-    fn();
+export const SelectPanel = <T, U>(
+  props: React.PropsWithChildren<Props<T, U>>
+) => {
+  const onClickAction = (action: SelectAction<U>) => {
+    action.event
+      ? props.setActionEvent({
+          uuid: uuidv4(),
+          event: action.event,
+        })
+      : "";
   };
 
   return (
@@ -30,13 +34,13 @@ export const SelectPanel: React.FC<Props> = ({ actions, nextAction }) => {
         p: 1,
       }}
     >
-      {actions.map((action, index) => {
+      {props.actions.map((action, index) => {
         if (action.hidden) {
           return <Box key={index}></Box>;
         }
         return (
           <Box key={index}>
-            <Button variant="text" onClick={() => onClickAction(action.fn)}>
+            <Button variant="text" onClick={() => onClickAction(action)}>
               {action.label}
             </Button>
           </Box>

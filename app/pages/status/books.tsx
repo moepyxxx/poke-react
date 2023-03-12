@@ -2,11 +2,10 @@ import {
   pokemonBookRangeMax,
   pokemonBookRangeMinAddFirstPokemons,
 } from "@/config";
-import { PokeAPIPokemon } from "@/config/types";
+import { PanelAction, PokeAPIPokemon, SelectAction } from "@/config/types";
 import { useAppSelector } from "@/hooks";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
-import { Action } from "@/modules/SelectPanel";
-import { Panel, PanelAction } from "@/modules/Panel";
+import { Panel } from "@/modules/Panel";
 import { StatusScreen } from "@/modules/StatusScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { Box, Grid, Typography } from "@mui/material";
@@ -44,7 +43,7 @@ export default function Status() {
     );
   }
 
-  const actions: Action[] = [
+  const actions: SelectAction[] = [
     {
       label: "パーク前に戻る",
       fn: () => router.push("/field/in_front_of_safari_park"),
@@ -54,7 +53,7 @@ export default function Status() {
   const panelActions: PanelAction<"">[] = [
     {
       quote: "あなたのポケモンずかんです。",
-      controllerActions: actions,
+      selectableActions: actions,
       isNextDisable: true,
     },
   ];

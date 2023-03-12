@@ -2,8 +2,7 @@ import { parkLocalStorageName } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { usePlayTime } from "@/hooks/usePlayTime";
-import { Action } from "@/modules/SelectPanel";
-import { Panel, PanelAction } from "@/modules/Panel";
+import { Panel } from "@/modules/Panel";
 import { FieldScreen } from "@/modules/FieldScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { setPokemons } from "@/stores/saveSlices";
@@ -11,60 +10,130 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { WalkField } from "@/modules/field/WalkField";
 import { createFieldInFrontOfSafariPark } from "@/config/field";
+import { ActionEvent, PanelAction } from "@/config/types";
+import { v4 as uuidv4 } from "uuid";
+import { Controller } from "@/modules/Controller";
+
+type PanelActionType = "selectAction" | "endSave" | "panelReset";
+type SelectActionType =
+  | "selectGoToPark"
+  | "selectStatus"
+  | "selectPokemonBook"
+  | "selectSave";
 
 export default function InFrontOfSafariPark() {
   const router = useRouter();
-  const state = useAppSelector((state) => state);
-  const [park, setPark] = useLocalStorage(parkLocalStorageName, null);
-  const dispatch = useAppDispatch();
-  const [_, savePlayTime] = usePlayTime();
-  const [currentActionPanelIndex, setCurrentActionPanelIndex] =
-    useState<number>(0);
-  const [isPanelDisplay, setIsPanelDisplay] = useState<boolean>(false);
 
+  const state = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
+  // const [_, savePlayTime] = usePlayTime();
+  const [isPanelDisplay, setIsPanelDisplay] = useState<boolean>(false);
+  const [actionEvent, setActionEvent] = useState<ActionEvent<
+    PanelActionType,
+    SelectActionType
+  > | null>(null);
+  const [currentAction, setCurrentAction] = useState<PanelAction<
+    PanelActionType,
+    SelectActionType
+  > | null>(null);
+
+  // TODO: アクションに対する操作はある程度関数に落とし込めるのでカスタムフックかHOCパターンとかにしたい
   useEffect(() => {
-    // TOPに来た時点でparkのデータが残ってたらゴミなので削除
-    if (park) {
-      setPark(null);
+    if (!actionEvent) return;
+
+    // アクションに対して関数がある場合はそれを実行（特別パターン）
+    // WalkFieldもactionEventをwatchしており指定した右左上下へ移動する動作が発生する
+    // そのためpushRight, pushLeft, pushAbove, pushBelowはここでは何もしない
+    // 見通しが悪いがこのコンポーネントで移動系の状態を持ちたくないので仕方なく…
+    switch (actionEvent.event) {
+      case "pushA":
+        if (currentAction?.nextEvent != null) {
+          setActionEvent({
+            uuid: uuidv4(),
+            event: currentAction.nextEvent,
+          });
+        }
+        return;
+      case "selectGoToPark":
+        goToSafariPark();
+        return;
+      case "selectSave":
+        save();
+        return;
+      case "selectPokemonBook":
+        router.push("/status/books");
+        return;
+      case "selectStatus":
+        router.push("/status/base_status");
+        return;
+      case "pushStart":
+        setIsPanelDisplay(!isPanelDisplay);
+        setActionEvent({
+          uuid: uuidv4(),
+          event: "selectAction",
+        });
+        return;
+      case "pushB":
+        setIsPanelDisplay(false);
+        return;
+      case "panelReset":
+        console.log("panelReset kitayo");
+        setIsPanelDisplay(false);
+        return;
+      default:
+      // 何もしない
     }
-  }, []);
+
+    // 特にない場合は次のイベントに切り替える
+    // イベントがない場合は何もしない
+    const action = panelActions.find(
+      (action) => action.event === actionEvent.event
+    );
+    if (action == null) return;
+    setCurrentAction(action);
+  }, [actionEvent]);
 
   // フィールドのための要素
-  // 画面上の座標数
   const screenBlockCount = 17;
-  // 画面すべての座標数
   const allScreenBlockCount = 24;
-  // すべての座標数
   const allBlockCount = allScreenBlockCount + (screenBlockCount - 1);
 
   const save = () => {
-    savePlayTime();
+    // savePlayTime();
     dispatch(setPokemons(state.local.pokemons));
-    const index = panelActions.findIndex((action) => action.label === "save");
-    setCurrentActionPanelIndex(index);
+
+    setActionEvent({
+      uuid: uuidv4(),
+      event: "endSave",
+    });
   };
 
   const goToSafariPark = () => {
     router.push("/field/safari_park");
   };
 
-  const actions: Action[] = [
-    { label: "パークへ入る", fn: goToSafariPark },
-    { label: "ポケモン", fn: () => router.push("/status") },
-    { label: "ポケモンずかん", fn: () => router.push("/books") },
-    { label: "セーブする", fn: save },
-  ];
-
-  const panelActions: PanelAction<"save">[] = [
+  const panelActions: PanelAction<PanelActionType, SelectActionType>[] = [
     {
+      event: "selectAction",
       quote: "なにをしますか？",
-      controllerActions: actions,
+      selectableActions: [
+        { label: "パークへ入る", event: "selectGoToPark" },
+        {
+          label: "ポケモン",
+          event: "selectPokemonBook",
+        },
+        {
+          label: "ポケモンずかん",
+          event: "selectPokemonBook",
+        },
+        { label: "セーブする", event: "selectSave" },
+      ],
       isNextDisable: true,
     },
     {
-      label: "save",
+      event: "endSave",
+      nextEvent: "panelReset",
       quote: "セーブできました！",
-      nextFn: () => setCurrentActionPanelIndex(0),
     },
   ];
 
@@ -76,14 +145,16 @@ export default function InFrontOfSafariPark() {
           field={createFieldInFrontOfSafariPark(allBlockCount)}
           screenBlockCount={screenBlockCount}
           allBlockCount={allBlockCount}
+          actionEvent={actionEvent}
+          setActionEvent={setActionEvent}
         />
         <Panel
           isDisplay={isPanelDisplay}
-          actions={panelActions}
-          currentActionIndex={currentActionPanelIndex}
-          setCurrentActionIndex={setCurrentActionPanelIndex}
+          action={currentAction}
+          setActionEvent={setActionEvent}
         />
       </FieldScreen>
+      <Controller setActionEvent={setActionEvent} />
     </>
   );
 }

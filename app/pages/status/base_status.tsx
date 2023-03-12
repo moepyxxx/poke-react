@@ -1,13 +1,13 @@
 import { useAppSelector } from "@/hooks";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
-import { Action } from "@/modules/SelectPanel";
-import { Panel, PanelAction } from "@/modules/Panel";
+import { Panel } from "@/modules/Panel";
 import { StatusScreen } from "@/modules/StatusScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { Box, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { PanelAction, SelectAction } from "@/config/types";
 
 export default function Status() {
   const router = useRouter();
@@ -18,14 +18,14 @@ export default function Status() {
   const [currentActionPanelIndex, setCurrentActionPanelIndex] =
     useState<number>(0);
 
-  const actions: Action[] = [
+  const actions: SelectAction[] = [
     { label: "パーク前に戻る", fn: () => router.push("/") },
   ];
 
   const panelActions: PanelAction<"">[] = [
     {
       quote: "あなたのポケモンのステータスです。",
-      controllerActions: actions,
+      selectableActions: actions,
       isNextDisable: true,
     },
   ];
