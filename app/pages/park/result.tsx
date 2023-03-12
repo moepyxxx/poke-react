@@ -4,7 +4,7 @@ import { useFetchPokemons } from "@/hooks/useFetchPokemons";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
 import { Action } from "@/modules/Controller";
 import { Panel, PanelAction } from "@/modules/Panel";
-import { Scene } from "@/modules/Scene";
+import { Scene } from "@/modules/Screen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { addPokemons } from "@/stores/localDataSlices";
 import { Grid, Typography } from "@mui/material";

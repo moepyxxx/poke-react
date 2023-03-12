@@ -4,7 +4,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { usePlayTime } from "@/hooks/usePlayTime";
 import { Action } from "@/modules/Controller";
 import { Panel, PanelAction } from "@/modules/Panel";
-import { Scene } from "@/modules/Scene";
+import { Screen } from "@/modules/Screen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { setPokemons } from "@/stores/saveSlices";
 import { Box } from "@mui/system";
@@ -63,7 +63,7 @@ export default function Home() {
   return (
     <>
       <SceneTitle title="サファリパーク前" />
-      <Scene>
+      <Screen>
         <Box sx={{ ...positionCenter }}>
           <Image
             width="320"
@@ -72,7 +72,7 @@ export default function Home() {
             alt="サファリパーク"
           />
         </Box>
-      </Scene>
+      </Screen>
       <Panel
         actions={panelActions}
         currentActionIndex={currentActionPanelIndex}

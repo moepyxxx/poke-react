@@ -1,5 +1,5 @@
 import { Panel, PanelAction } from "@/modules/Panel";
-import { Scene } from "@/modules/Scene";
+import { Screen } from "@/modules/Screen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { SetPartner } from "@/modules/start/SetPartner";
 import { SetPlayerName } from "@/modules/start/SetPlayerName";
@@ -95,9 +95,9 @@ export default function Start() {
   return (
     <>
       <SceneTitle title="はじめに" />
-      <Scene>
+      <Screen>
         <SceneComponent />
-      </Scene>
+      </Screen>
       <Panel
         actions={panelActions}
         currentActionIndex={currentActionPanelIndex}

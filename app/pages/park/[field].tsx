@@ -4,7 +4,7 @@ import { parseFieldName, randomResult } from "@/config/utils";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
 import { Action } from "@/modules/Controller";
 import { Panel, PanelAction } from "@/modules/Panel";
-import { Scene } from "@/modules/Scene";
+import { Scene } from "@/modules/Screen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
