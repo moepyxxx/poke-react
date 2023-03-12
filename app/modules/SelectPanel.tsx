@@ -1,3 +1,4 @@
+import { zIndex } from "@/config/style";
 import { ActionEvent, SelectAction } from "@/config/types";
 import { SingleBoxBorder } from "@/pages/_app";
 import { Box, Button } from "@mui/material";
@@ -29,7 +30,7 @@ export const SelectPanel = <T, U>(
         height: "auto",
         bottom: 100,
         right: 0,
-        zIndex: 1,
+        zIndex: zIndex.panel,
         ...SingleBoxBorder,
         p: 1,
       }}

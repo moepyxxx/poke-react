@@ -158,6 +158,7 @@ export const WalkField = <T, U>(
 
   return (
     <Grid
+      justifyContent="center"
       container
       spacing={1}
       sx={{ textAlign: "center", verticalAlign: "middle" }}

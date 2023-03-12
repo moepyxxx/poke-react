@@ -19,20 +19,11 @@ export const Panel = <T, U>(props: React.PropsWithChildren<Props<T, U>>) => {
         <SelectPanel
           actions={props.action.selectableActions}
           setActionEvent={props.setActionEvent}
-          // nextAction={
-          //   currentAction.isNextDisable ? undefined : changeNextPanelAction
-          // }
         />
       ) : (
         <></>
       )}
-      <QuotePanel
-        action={props.action}
-        setActionEvent={props.setActionEvent}
-        // nextAction={
-        //   currentAction.isNextDisable ? undefined : changeNextPanelAction
-        // }
-      />
+      <QuotePanel action={props.action} setActionEvent={props.setActionEvent} />
     </>
   );
 };

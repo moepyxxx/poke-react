@@ -5,6 +5,7 @@ import { animated, useSprings } from "@react-spring/web";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ActionEvent, PanelAction, SelectAction } from "@/config/types";
 import { v4 as uuidv4 } from "uuid";
+import { zIndex } from "@/config/style";
 
 const to = (i: number) => ({
   opacity: 1,
@@ -51,7 +52,7 @@ export const QuotePanel = <T, U>(
         bottom: 0,
         p: 2,
         height: 84,
-        zIndex: 1,
+        zIndex: zIndex.panel,
         ...SingleBoxBorder,
       }}
     >

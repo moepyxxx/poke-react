@@ -17,7 +17,10 @@ export const Controller = <T, U>(
     });
   };
   return (
-    <Box sx={{ position: "relative", zIndex: zIndex.controller }}>
+    <Box
+      // TODO: 脳が死んだ。stylingは今度やる
+      sx={{ position: "absolute", bottom: "-40px", zIndex: zIndex.controller }}
+    >
       <button onClick={() => changeActionEvent("pushLeft")}>left</button>
       <button onClick={() => changeActionEvent("pushRight")}>right</button>
       <button onClick={() => changeActionEvent("pushAbove")}>above</button>
