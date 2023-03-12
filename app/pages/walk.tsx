@@ -1,138 +1,117 @@
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useEffect, useState } from "react";
-
-// 画面上の座標数
-// const screenBlockCount = 17;
-const screenBlockCount = 8;
-
-// すべての座標数
-// const allBlockCount = 34;
-const allBlockCount = 10;
-
-// すべてのフィールド数
-const allFieldBlocks = Array.from(
-  new Array(allBlockCount ** 2),
-  (x, i) => i + 1
-);
-
-// スタート位置を算出する
-const getStartCoordinate = (
-  middleCoordinate: number,
-  screenBlockCount: number,
-  allBlockCount: number
-) => {
-  const coordinateStart =
-    middleCoordinate -
-    allBlockCount * Math.ceil(screenBlockCount / 2) -
-    Math.floor(screenBlockCount / 2);
-
-  return coordinateStart;
-};
-
-// // 真ん中を算出する
-// const getMiddleCoordinate = (
-//   startCoordinate: number,
-//   screenBlockCount: number
-// ): number => {
-//   return (
-//     startCoordinate +
-//     screenBlockCount * Math.floor(screenBlockCount / 2) +
-//     screenBlockCount * Math.ceil(screenBlockCount / 2)
-//   );
-// };
+import { isEqual } from "lodash-es";
+import { Coordinate } from "@/config/field";
 
 const getScreenFieldBlocks = (
-  screenBlockCount: number,
-  allBlockCount: number,
-  coordinateStart: number
-): number[] => {
-  const blocks = [];
+  startCoordinate: Coordinate,
+  screenBlockCount: number
+): Coordinate[] => {
+  const blocks: Coordinate[] = [];
+
   for (let y = 0; y < screenBlockCount; y++) {
-    const startPoint = Math.floor(
-      (coordinateStart + allBlockCount * y) / allBlockCount
-    );
-    const blockRangeStart = startPoint * allBlockCount;
-    const blockRangeEnd = (startPoint + 1) * allBlockCount;
     for (let x = 0; x < screenBlockCount; x++) {
-      const coordinate = coordinateStart + allBlockCount * y + x;
-
-      const isValid =
-        coordinate > blockRangeStart && coordinate <= blockRangeEnd;
-
-      blocks.push(isValid ? coordinate : 0);
+      const coordinate = {
+        x: startCoordinate.x + x,
+        y: startCoordinate.y + y,
+      };
+      blocks.push(coordinate);
     }
   }
   return blocks;
 };
 
-const getAllBlockMiddleCoordinate = (allBlockCount: number) => {
-  return Math.floor(allBlockCount ** 2 / 2) + Math.floor(allBlockCount / 2);
-};
-
 export default function Walk() {
+  // 画面上の座標数
+  const screenBlockCount = 17;
+  // 画面すべての座標数
+  const allScreenBlockCount = 24;
+  // すべての座標数
+  const allBlockCount = allScreenBlockCount + (screenBlockCount - 1);
+
+  const initMiddleCoordinate: Coordinate = {
+    x: Math.ceil(allBlockCount / 2),
+    y: Math.ceil(allBlockCount / 2),
+  };
+  const initStartCoordinate: Coordinate = {
+    x: initMiddleCoordinate.x - Math.floor(screenBlockCount / 2),
+    y: initMiddleCoordinate.y - Math.floor(screenBlockCount / 2),
+  };
+
   const [currentCoordinateStart, setCurrentCoordinateStart] =
-    useState<number>(0);
+    useState<Coordinate>(initStartCoordinate);
+
   const [currentMiddleCoordinate, setCurrentMiddleCoordinate] =
-    useState<number>(getAllBlockMiddleCoordinate(allBlockCount));
+    useState<Coordinate>(initMiddleCoordinate);
 
   const [currentScreenFieldBlocks, setCurrentScreenFieldBlocks] = useState<
-    number[]
+    Coordinate[]
   >([]);
 
+  console.log(currentCoordinateStart, "currentCoordinateStart");
+  console.log(currentMiddleCoordinate, "currentMiddleCoordinate");
+
   useEffect(() => {
-    setCurrentCoordinateStart(
-      getStartCoordinate(
-        currentMiddleCoordinate,
-        screenBlockCount,
-        allBlockCount
-      )
-    );
+    setCurrentCoordinateStart({
+      x: currentMiddleCoordinate.x - Math.floor(screenBlockCount / 2),
+      y: currentMiddleCoordinate.y - Math.floor(screenBlockCount / 2),
+    });
   }, [currentMiddleCoordinate]);
 
   useEffect(() => {
     setCurrentScreenFieldBlocks(
-      getScreenFieldBlocks(
-        screenBlockCount,
-        allBlockCount,
-        currentCoordinateStart
-      )
+      getScreenFieldBlocks(currentCoordinateStart, screenBlockCount)
     );
-    console.log("result");
-    console.log(currentCoordinateStart, "currentCoordinateStart ok");
-    console.log(currentMiddleCoordinate, "currentMiddleCoordinate ok");
-    console.log(currentScreenFieldBlocks, "currentScreenFieldBlocks");
-    console.log(allFieldBlocks, "allFieldBlocks");
   }, [currentCoordinateStart]);
 
   const onLeft = () => {
-    const canLeft = currentMiddleCoordinate % allBlockCount !== 1;
+    const canLeft =
+      currentMiddleCoordinate.x - 1 > Math.floor(screenBlockCount / 2);
 
     if (canLeft) {
-      setCurrentMiddleCoordinate(currentMiddleCoordinate - 1);
+      setCurrentMiddleCoordinate({
+        x: currentMiddleCoordinate.x - 1,
+        y: currentMiddleCoordinate.y,
+      });
     }
   };
 
   const onRight = () => {
-    const canRight = currentMiddleCoordinate % allBlockCount !== 0;
+    const canRight =
+      currentMiddleCoordinate.x + 1 <=
+      allBlockCount - Math.floor(screenBlockCount / 2);
+
     if (canRight) {
-      setCurrentMiddleCoordinate(currentMiddleCoordinate + 1);
+      setCurrentMiddleCoordinate({
+        x: currentMiddleCoordinate.x + 1,
+        y: currentMiddleCoordinate.y,
+      });
     }
   };
 
   const onTop = () => {
-    const canTop = currentMiddleCoordinate >= allBlockCount;
-    console.log(canTop);
+    const canTop =
+      currentMiddleCoordinate.y - 1 > Math.floor(screenBlockCount / 2);
+
     if (canTop) {
-      setCurrentMiddleCoordinate(currentMiddleCoordinate - allBlockCount);
+      setCurrentMiddleCoordinate({
+        x: currentMiddleCoordinate.x,
+        y: currentMiddleCoordinate.y - 1,
+      });
     }
   };
 
   const onBottom = () => {
-    const next = currentMiddleCoordinate + allBlockCount;
-    const canBottom = next < allBlockCount ** 2;
+    const canBottom =
+      currentMiddleCoordinate.y + 1 <=
+      allBlockCount - Math.floor(screenBlockCount / 2);
+
     if (canBottom) {
-      setCurrentMiddleCoordinate(next);
+      setCurrentMiddleCoordinate({
+        x: currentMiddleCoordinate.x,
+        y: currentMiddleCoordinate.y + 1,
+      });
     }
   };
 
@@ -144,14 +123,19 @@ export default function Walk() {
     >
       {currentScreenFieldBlocks.map((block, index) => {
         return (
-          //   <Grid xs={0.7}>
-          <Grid xs={1.5} key={index}>
+          <Grid key={index} sx={{ padding: 0 }}>
+            {/* // <Grid xs={1.3} key={index}> */}
             <Box
               sx={{
-                color: currentMiddleCoordinate === block ? "red" : "black",
+                color: isEqual(block, currentMiddleCoordinate)
+                  ? "red"
+                  : "black",
+                width: 32,
+                height: 32,
+                padding: 0,
               }}
             >
-              {block}
+              {block.x}/{block.y}
             </Box>
           </Grid>
         );
