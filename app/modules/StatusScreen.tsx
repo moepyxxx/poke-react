@@ -14,7 +14,7 @@ export const StatusScreen: React.FC<Props> = ({ children }) => {
         top: 24,
         left: "50%",
         transform: "translateX(-50%)",
-        height: 480,
+        height: 560,
         width: "calc(100% - 48px)",
       }}
     >

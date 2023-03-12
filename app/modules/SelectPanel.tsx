@@ -11,7 +11,7 @@ type Props = {
   actions: Action[];
   nextAction?: () => void;
 };
-export const Controller: React.FC<Props> = ({ actions, nextAction }) => {
+export const SelectPanel: React.FC<Props> = ({ actions, nextAction }) => {
   const onClickAction = (fn: () => void) => {
     nextAction ? nextAction() : "";
     fn();
@@ -23,8 +23,8 @@ export const Controller: React.FC<Props> = ({ actions, nextAction }) => {
         position: "absolute",
         width: 148,
         height: "auto",
-        bottom: 128,
-        right: 24,
+        bottom: 100,
+        right: 0,
         zIndex: 1,
         ...SingleBoxBorder,
         p: 1,

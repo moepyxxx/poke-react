@@ -2,7 +2,7 @@ import { parkLocalStorageName } from "@/config";
 import { useAppDispatch } from "@/hooks";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
-import { Action } from "@/modules/Controller";
+import { Action } from "@/modules/SelectPanel";
 import { Panel, PanelAction } from "@/modules/Panel";
 import { Scene } from "@/modules/FieldScreen";
 import { SceneTitle } from "@/modules/SceneTitle";

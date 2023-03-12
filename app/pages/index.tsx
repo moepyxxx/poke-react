@@ -2,16 +2,13 @@ import { parkLocalStorageName } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { usePlayTime } from "@/hooks/usePlayTime";
-import { Action } from "@/modules/Controller";
+import { Action } from "@/modules/SelectPanel";
 import { Panel, PanelAction } from "@/modules/Panel";
 import { FieldScreen } from "@/modules/FieldScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { setPokemons } from "@/stores/saveSlices";
-import { Box } from "@mui/system";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { positionCenter } from "./_app";
 import { WalkField } from "@/modules/field/WalkField";
 import { createFieldInFrontOfSafariPark } from "@/config/field";
 
@@ -23,6 +20,7 @@ export default function Home() {
   const [_, savePlayTime] = usePlayTime();
   const [currentActionPanelIndex, setCurrentActionPanelIndex] =
     useState<number>(0);
+  const [isPanelDisplay, setIsPanelDisplay] = useState<boolean>(false);
 
   useEffect(() => {
     // TOPに来た時点でparkのデータが残ってたらゴミなので削除
@@ -79,12 +77,13 @@ export default function Home() {
           screenBlockCount={screenBlockCount}
           allBlockCount={allBlockCount}
         />
+        <Panel
+          isDisplay={isPanelDisplay}
+          actions={panelActions}
+          currentActionIndex={currentActionPanelIndex}
+          setCurrentActionIndex={setCurrentActionPanelIndex}
+        />
       </FieldScreen>
-      {/* <Panel
-        actions={panelActions}
-        currentActionIndex={currentActionPanelIndex}
-        setCurrentActionIndex={setCurrentActionPanelIndex}
-      /> */}
     </>
   );
 }

@@ -13,7 +13,7 @@ type Props = {
   quote: string;
   nextAction?: () => void;
 };
-export const Quote: React.FC<Props> = ({ quote, nextAction }) => {
+export const QuotePanel: React.FC<Props> = ({ quote, nextAction }) => {
   const [props, api] = useSprings(quote.split("").length, (i) => ({
     ...to(i),
     from: {
@@ -29,8 +29,8 @@ export const Quote: React.FC<Props> = ({ quote, nextAction }) => {
       onClick={nextAction}
       sx={{
         position: "absolute",
-        width: "calc(100% - 48px)",
-        bottom: 24,
+        width: "100%",
+        bottom: 0,
         p: 2,
         height: 84,
         zIndex: 1,

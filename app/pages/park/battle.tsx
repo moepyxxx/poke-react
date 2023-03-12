@@ -3,7 +3,7 @@ import { PokeAPIPokemon } from "@/config/types";
 import { randomResult } from "@/config/utils";
 import { useFetchWildPokemon } from "@/hooks/useFetchWildPokemon";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
-import { Action } from "@/modules/Controller";
+import { Action } from "@/modules/SelectPanel";
 import { Panel, PanelAction } from "@/modules/Panel";
 import { Scene } from "@/modules/FieldScreen";
 import { SceneTitle } from "@/modules/SceneTitle";

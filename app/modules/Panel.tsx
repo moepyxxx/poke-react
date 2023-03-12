@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Action, Controller } from "./Controller";
-import { Quote } from "./Quote";
+import { Action, SelectPanel } from "./SelectPanel";
+import { QuotePanel } from "./QuotePanel";
 
 export type PanelAction<T> = {
   label?: T;
@@ -10,6 +10,7 @@ export type PanelAction<T> = {
   isNextDisable?: boolean;
 };
 type Props<T> = {
+  isDisplay: boolean;
   actions: PanelAction<T>[];
   currentActionIndex: number;
   setCurrentActionIndex: Dispatch<SetStateAction<number>>;
@@ -35,12 +36,12 @@ export const Panel = <T,>(props: React.PropsWithChildren<Props<T>>) => {
     props.setCurrentActionIndex((index) => index + 1);
   };
 
-  if (!currentAction) return <></>;
+  if (!currentAction || !props.isDisplay) return <></>;
 
   return (
     <>
       {currentAction.controllerActions ? (
-        <Controller
+        <SelectPanel
           actions={currentAction.controllerActions}
           nextAction={
             currentAction.isNextDisable ? undefined : changeNextPanelAction
@@ -49,7 +50,7 @@ export const Panel = <T,>(props: React.PropsWithChildren<Props<T>>) => {
       ) : (
         <></>
       )}
-      <Quote
+      <QuotePanel
         quote={currentAction.quote}
         nextAction={
           currentAction.isNextDisable ? undefined : changeNextPanelAction

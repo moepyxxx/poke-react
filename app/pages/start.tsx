@@ -97,12 +97,13 @@ export default function Start() {
       <SceneTitle title="はじめに" />
       <StatusScreen>
         <SceneComponent />
+        <Panel
+          isDisplay
+          actions={panelActions}
+          currentActionIndex={currentActionPanelIndex}
+          setCurrentActionIndex={setCurrentActionPanelIndex}
+        />
       </StatusScreen>
-      <Panel
-        actions={panelActions}
-        currentActionIndex={currentActionPanelIndex}
-        setCurrentActionIndex={setCurrentActionPanelIndex}
-      />
     </>
   );
 }

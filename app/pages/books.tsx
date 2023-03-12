@@ -5,7 +5,7 @@ import {
 import { PokeAPIPokemon } from "@/config/types";
 import { useAppSelector } from "@/hooks";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
-import { Action } from "@/modules/Controller";
+import { Action } from "@/modules/SelectPanel";
 import { Panel, PanelAction } from "@/modules/Panel";
 import { StatusScreen } from "@/modules/StatusScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
@@ -80,12 +80,13 @@ export default function Status() {
             </Box>
           );
         })}
+        <Panel
+          isDisplay
+          actions={panelActions}
+          currentActionIndex={currentActionPanelIndex}
+          setCurrentActionIndex={setCurrentActionPanelIndex}
+        />
       </StatusScreen>
-      <Panel
-        actions={panelActions}
-        currentActionIndex={currentActionPanelIndex}
-        setCurrentActionIndex={setCurrentActionPanelIndex}
-      />
     </>
   );
 }
