@@ -1,8 +1,8 @@
-import { Box } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useEffect, useState } from "react";
-import { isEqual } from "lodash-es";
-import { Coordinate } from "@/config/field";
+import { Coordinate, createFieldInFrontOfSafariPark } from "@/config/field";
+import { FieldContainer } from "@/modules/field/FieldContainer";
+import { Direction } from "../modules/field/FieldContainer";
 
 const getScreenFieldBlocks = (
   startCoordinate: Coordinate,
@@ -29,6 +29,8 @@ export default function Walk() {
   const allScreenBlockCount = 24;
   // すべての座標数
   const allBlockCount = allScreenBlockCount + (screenBlockCount - 1);
+  // フィールド要素
+  const field = createFieldInFrontOfSafariPark(allBlockCount);
 
   const initMiddleCoordinate: Coordinate = {
     x: Math.ceil(allBlockCount / 2),
@@ -49,8 +51,7 @@ export default function Walk() {
     Coordinate[]
   >([]);
 
-  console.log(currentCoordinateStart, "currentCoordinateStart");
-  console.log(currentMiddleCoordinate, "currentMiddleCoordinate");
+  const [heroDirection, setHeroDirection] = useState<Direction>("below");
 
   useEffect(() => {
     setCurrentCoordinateStart({
@@ -124,19 +125,12 @@ export default function Walk() {
       {currentScreenFieldBlocks.map((block, index) => {
         return (
           <Grid key={index} sx={{ padding: 0 }}>
-            {/* // <Grid xs={1.3} key={index}> */}
-            <Box
-              sx={{
-                color: isEqual(block, currentMiddleCoordinate)
-                  ? "red"
-                  : "black",
-                width: 32,
-                height: 32,
-                padding: 0,
-              }}
-            >
-              {block.x}/{block.y}
-            </Box>
+            <FieldContainer
+              currentCoordinate={block}
+              middleCoordinate={currentMiddleCoordinate}
+              field={field}
+              heroDirection={heroDirection}
+            />
           </Grid>
         );
       })}
