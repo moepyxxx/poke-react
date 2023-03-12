@@ -2,7 +2,7 @@ import { useAppSelector } from "@/hooks";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
 import { Action } from "@/modules/Controller";
 import { Panel, PanelAction } from "@/modules/Panel";
-import { Screen } from "@/modules/Screen";
+import { StatusScreen } from "@/modules/StatusScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { Box, Grid, Typography } from "@mui/material";
 import Image from "next/image";
@@ -33,7 +33,7 @@ export default function Status() {
   return (
     <div>
       <SceneTitle title="あなたのポケモン" />
-      <Screen>
+      <StatusScreen>
         {local.pokemons.map((pokemon, index) => {
           const bookPokemon = capturePokemons.find((p) => p.id === pokemon.id);
           if (!bookPokemon) return <></>;
@@ -56,7 +56,7 @@ export default function Status() {
             </Box>
           );
         })}
-      </Screen>
+      </StatusScreen>
       <Panel
         actions={panelActions}
         currentActionIndex={currentActionPanelIndex}

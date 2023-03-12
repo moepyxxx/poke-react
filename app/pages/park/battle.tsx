@@ -5,7 +5,7 @@ import { useFetchWildPokemon } from "@/hooks/useFetchWildPokemon";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
 import { Action } from "@/modules/Controller";
 import { Panel, PanelAction } from "@/modules/Panel";
-import { Scene } from "@/modules/Screen";
+import { Scene } from "@/modules/FieldScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";

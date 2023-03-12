@@ -5,7 +5,7 @@ type Props = {
   children: ReactNode;
 };
 
-export const Screen: React.FC<Props> = ({ children }) => {
+export const StatusScreen: React.FC<Props> = ({ children }) => {
   return (
     <Box
       sx={{

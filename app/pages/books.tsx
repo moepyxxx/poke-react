@@ -7,7 +7,7 @@ import { useAppSelector } from "@/hooks";
 import { useFetchPokemons } from "@/hooks/useFetchPokemons";
 import { Action } from "@/modules/Controller";
 import { Panel, PanelAction } from "@/modules/Panel";
-import { Screen } from "@/modules/Screen";
+import { StatusScreen } from "@/modules/StatusScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { Box, Grid, Typography } from "@mui/material";
 import Image from "next/image";
@@ -59,7 +59,7 @@ export default function Status() {
   return (
     <>
       <SceneTitle title="ポケモンずかん" />
-      <Screen>
+      <StatusScreen>
         {createdBookPokemons.map((pokemon) => {
           return (
             <Box key={pokemon.id}>
@@ -80,7 +80,7 @@ export default function Status() {
             </Box>
           );
         })}
-      </Screen>
+      </StatusScreen>
       <Panel
         actions={panelActions}
         currentActionIndex={currentActionPanelIndex}

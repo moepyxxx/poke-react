@@ -4,7 +4,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { usePlayTime } from "@/hooks/usePlayTime";
 import { Action } from "@/modules/Controller";
 import { Panel, PanelAction } from "@/modules/Panel";
-import { Screen } from "@/modules/Screen";
+import { FieldScreen } from "@/modules/FieldScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { setPokemons } from "@/stores/saveSlices";
 import { Box } from "@mui/system";
@@ -12,6 +12,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { positionCenter } from "./_app";
+import { WalkField } from "@/modules/field/WalkField";
+import { createFieldInFrontOfSafariPark } from "@/config/field";
 
 export default function Home() {
   const router = useRouter();
@@ -28,6 +30,14 @@ export default function Home() {
       setPark(null);
     }
   }, []);
+
+  // フィールドのための要素
+  // 画面上の座標数
+  const screenBlockCount = 17;
+  // 画面すべての座標数
+  const allScreenBlockCount = 24;
+  // すべての座標数
+  const allBlockCount = allScreenBlockCount + (screenBlockCount - 1);
 
   const save = () => {
     savePlayTime();
@@ -62,22 +72,19 @@ export default function Home() {
 
   return (
     <>
-      <SceneTitle title="サファリパーク前" />
-      <Screen>
-        <Box sx={{ ...positionCenter }}>
-          <Image
-            width="320"
-            height="250"
-            src="/images/safari_park.svg"
-            alt="サファリパーク"
-          />
-        </Box>
-      </Screen>
-      <Panel
+      {/* <SceneTitle title="サファリパーク前" /> */}
+      <FieldScreen>
+        <WalkField
+          field={createFieldInFrontOfSafariPark(allBlockCount)}
+          screenBlockCount={screenBlockCount}
+          allBlockCount={allBlockCount}
+        />
+      </FieldScreen>
+      {/* <Panel
         actions={panelActions}
         currentActionIndex={currentActionPanelIndex}
         setCurrentActionIndex={setCurrentActionPanelIndex}
-      />
+      /> */}
     </>
   );
 }
