@@ -25,8 +25,8 @@ export default function Start() {
     useState<number>(0);
   const state = useAppSelector((state) => state);
 
-  const start = () => {
-    router.push("/");
+  const goToStartField = () => {
+    router.push("/field/in_front_of_safari_park");
   };
 
   const setName = () => {
@@ -67,7 +67,7 @@ export default function Start() {
     },
     {
       quote: "こまめにセーブをするのは、忘れないでくださいね。",
-      nextFn: start,
+      nextFn: goToStartField,
     },
   ];
 

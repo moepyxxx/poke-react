@@ -4,7 +4,7 @@ import { useFetchPokemons } from "@/hooks/useFetchPokemons";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
 import { Action } from "@/modules/SelectPanel";
 import { Panel, PanelAction } from "@/modules/Panel";
-import { Scene } from "@/modules/FieldScreen";
+import { FieldScreen } from "@/modules/FieldScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { addPokemons } from "@/stores/localDataSlices";
 import { Grid, Typography } from "@mui/material";
@@ -52,7 +52,7 @@ export default function ParkResult() {
   return (
     <>
       <SceneTitle title="たんけん結果" />
-      <Scene>
+      <FieldScreen>
         <Grid container spacing={2}>
           {pokemons.map((pokemon, index) => {
             return (
@@ -79,13 +79,14 @@ export default function ParkResult() {
             );
           })}
         </Grid>
-      </Scene>
+        <Panel
+          actions={panelActions}
+          currentActionIndex={currentActionPanelIndex}
+          setCurrentActionIndex={setCurrentActionPanelIndex}
+          isDisplay
+        />
+      </FieldScreen>
       {/** TODO: ニックネーム or 逃す */}
-      <Panel
-        actions={panelActions}
-        currentActionIndex={currentActionPanelIndex}
-        setCurrentActionIndex={setCurrentActionPanelIndex}
-      />
     </>
   );
 }

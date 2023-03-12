@@ -45,7 +45,10 @@ export default function Status() {
   }
 
   const actions: Action[] = [
-    { label: "パーク前に戻る", fn: () => router.push("/") },
+    {
+      label: "パーク前に戻る",
+      fn: () => router.push("/field/in_front_of_safari_park"),
+    },
   ];
 
   const panelActions: PanelAction<"">[] = [

@@ -42,6 +42,7 @@ export default function ParkIndex() {
         actions={panelActions}
         currentActionIndex={currentActionPanelIndex}
         setCurrentActionIndex={setCurrentActionPanelIndex}
+        isDisplay
       />
     </>
   );

@@ -4,7 +4,7 @@ import { parseFieldName, randomResult } from "@/config/utils";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
 import { Action } from "@/modules/SelectPanel";
 import { Panel, PanelAction } from "@/modules/Panel";
-import { Scene } from "@/modules/FieldScreen";
+import { FieldScreen } from "@/modules/FieldScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -85,14 +85,15 @@ export default function FieldIndex() {
   return (
     <div>
       <SceneTitle title={`サファリパーク内 - ${parseFieldName(field)}`} />
-      <Panel
-        actions={panelActions}
-        currentActionIndex={currentActionPanelIndex}
-        setCurrentActionIndex={setCurrentActionPanelIndex}
-      />
-      <Scene>
+      <FieldScreen>
         <></>
-      </Scene>
+        <Panel
+          actions={panelActions}
+          currentActionIndex={currentActionPanelIndex}
+          setCurrentActionIndex={setCurrentActionPanelIndex}
+          isDisplay
+        />
+      </FieldScreen>
     </div>
   );
 }

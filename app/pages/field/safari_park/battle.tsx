@@ -5,13 +5,13 @@ import { useFetchWildPokemon } from "@/hooks/useFetchWildPokemon";
 import { Park, useLocalStorage } from "@/hooks/useLocalStorage";
 import { Action } from "@/modules/SelectPanel";
 import { Panel, PanelAction } from "@/modules/Panel";
-import { Scene } from "@/modules/FieldScreen";
+import { FieldScreen } from "@/modules/FieldScreen";
 import { SceneTitle } from "@/modules/SceneTitle";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { positionCenter } from "../_app";
+import { positionCenter } from "../../_app";
 
 export default function Battle() {
   const router = useRouter();
@@ -186,14 +186,15 @@ export default function Battle() {
   return (
     <div>
       <SceneTitle title={`バトル`} />
-      <Panel
-        actions={panelActions}
-        currentActionIndex={currentActionPanelIndex}
-        setCurrentActionIndex={setCurrentActionPanelIndex}
-      />
-      <Scene>
-        <AppearPokemon />
-      </Scene>
+      <FieldScreen>
+        <AppearPokemon />{" "}
+        <Panel
+          actions={panelActions}
+          currentActionIndex={currentActionPanelIndex}
+          setCurrentActionIndex={setCurrentActionPanelIndex}
+          isDisplay
+        />
+      </FieldScreen>
     </div>
   );
 }

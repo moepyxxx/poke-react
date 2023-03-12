@@ -19,11 +19,12 @@ export const Config: React.FC = () => {
     // ゲーム開始していない場合は初期化
     if (!state.save.isGameStart) {
       setPark(null);
-      router.push("start");
+      router.push("/status/start");
     }
 
     dispatch(setPokemons(state.save.pokemons));
     gameStart();
+    router.push("/field/in_front_of_safari_park");
   }, []);
 
   const playTime = (playtime: number) => {

@@ -1,4 +1,4 @@
-import { Scene } from "@/pages/start";
+import { Scene } from "@/pages/status/start";
 import { Dispatch, SetStateAction } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";

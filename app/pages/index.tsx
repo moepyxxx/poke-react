@@ -27,63 +27,9 @@ export default function Home() {
     if (park) {
       setPark(null);
     }
+
+    // TODO: セーブデータがあればその場所から、とかしたい
+    router.push("/field/in_front_of_safari_park");
   }, []);
-
-  // フィールドのための要素
-  // 画面上の座標数
-  const screenBlockCount = 17;
-  // 画面すべての座標数
-  const allScreenBlockCount = 24;
-  // すべての座標数
-  const allBlockCount = allScreenBlockCount + (screenBlockCount - 1);
-
-  const save = () => {
-    savePlayTime();
-    dispatch(setPokemons(state.local.pokemons));
-    const index = panelActions.findIndex((action) => action.label === "save");
-    setCurrentActionPanelIndex(index);
-  };
-
-  const start = () => {
-    router.push("/park");
-  };
-
-  const actions: Action[] = [
-    { label: "パークへ入る", fn: start },
-    { label: "ポケモン", fn: () => router.push("/status") },
-    { label: "ポケモンずかん", fn: () => router.push("/books") },
-    { label: "セーブする", fn: save },
-  ];
-
-  const panelActions: PanelAction<"save">[] = [
-    {
-      quote: "なにをしますか？",
-      controllerActions: actions,
-      isNextDisable: true,
-    },
-    {
-      label: "save",
-      quote: "セーブできました！",
-      nextFn: () => setCurrentActionPanelIndex(0),
-    },
-  ];
-
-  return (
-    <>
-      {/* <SceneTitle title="サファリパーク前" /> */}
-      <FieldScreen>
-        <WalkField
-          field={createFieldInFrontOfSafariPark(allBlockCount)}
-          screenBlockCount={screenBlockCount}
-          allBlockCount={allBlockCount}
-        />
-        <Panel
-          isDisplay={isPanelDisplay}
-          actions={panelActions}
-          currentActionIndex={currentActionPanelIndex}
-          setCurrentActionIndex={setCurrentActionPanelIndex}
-        />
-      </FieldScreen>
-    </>
-  );
+  return <></>;
 }
